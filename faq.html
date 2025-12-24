@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FAQ | SkinGlam</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0; padding: 0;
+      background-color: #fff;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #ff69b4;
+      color: white;
+      padding: 60px 20px 40px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgb(255 105 180 / 0.3);
+    }
+    header h1 {
+      margin-bottom: 10px;
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+    header p {
+      font-size: 1.3rem;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+    .faq-container {
+      max-width: 900px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+    }
+    .faq-item {
+      background: #fff0f6;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      padding: 20px 25px;
+      box-shadow: 0 6px 20px rgb(255 105 180 / 0.15);
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+    }
+    .faq-item:hover {
+      box-shadow: 0 8px 30px rgb(255 105 180 / 0.3);
+    }
+    .faq-question {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #d63384;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-question i {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+    .faq-answer {
+      margin-top: 12px;
+      display: none;
+      font-size: 1rem;
+      color: #444;
+      line-height: 1.5;
+    }
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+    .faq-item.active .faq-question i {
+      transform: rotate(45deg);
+    }
+    .back-home {
+      text-align: center;
+      margin: 40px 0 60px;
+    }
+    .back-home a {
+      background-color: #ff69b4;
+      color: white;
+      text-decoration: none;
+      padding: 14px 30px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 5px 15px rgb(255 105 180 / 0.6);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .back-home a:hover {
+      background-color: #d63384;
+      box-shadow: 0 6px 20px rgb(214 51 132 / 0.9);
+    }
+    .back-home a i {
+      font-size: 1.3rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Frequently Asked Questions</h1>
+  <p>Your SkinGlam Questions Answered</p>
+</header>
+
+<div class="faq-container">
+  <div class="faq-item">
+    <div class="faq-question">
+      How can I get personalized skin care recommendations?
+      <i class="fas fa-plus"></i>
+    </div>
+    <div class="faq-answer">
+      You can use our skin analysis tool to get personalized product recommendations tailored to your skin type and concerns.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      What is SkinGlam’s return policy?
+      <i class="fas fa-plus"></i>
+    </div>
+    <div class="faq-answer">
+      We accept returns within 14 days of purchase as long as the products are unopened and in their original packaging.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Do you offer international shipping?
+      <i class="fas fa-plus"></i>
+    </div>
+    <div class="faq-answer">
+      Yes! We ship internationally. Shipping fees and delivery times vary depending on the destination.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      How do I contact customer support?
+      <i class="fas fa-plus"></i>
+    </div>
+    <div class="faq-answer">
+      You can contact us via the Contact page, email us at support@skinglam.com, or reach out through our social media channels.
+    </div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question">
+      Are your products cruelty-free and vegan?
+      <i class="fas fa-plus"></i>
+    </div>
+    <div class="faq-answer">
+      Absolutely! All SkinGlam products are cruelty-free and formulated without any animal-derived ingredients.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">
+      Can I track my order after purchase?
+      <i class="fas fa-plus"></i>
+    </div>
+    <div class="faq-answer">
+      Yes, once your order ships, you will receive a tracking number via email to monitor your delivery status.
+    </div>
+  </div>
+</div>
+
+
+
+<div class="back-home">
+  <a href="test.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+</div>
+
+<script>
+  document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+      const faqItem = question.parentElement;
+      faqItem.classList.toggle('active');
+    });
+  });
+</script>
+
+</body>
+</html>

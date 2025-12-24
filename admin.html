@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkinGlam Admin Dashboard</title>
+     <link rel="stylesheet" href="admin.css">
+      <link rel="stylesheet" href="h.css">
+      <style>/* Modal form styling only */
+
+/* Modal form styling */
+#createDiscountModal .modal-content {
+  background-color: var(--bg-card);
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: auto;
+  box-shadow: var(--shadow-medium);
+}
+
+#createDiscountModal form label {
+  margin-top: 15px;
+  display: block;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+#createDiscountModal form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  color: var(--text-dark);
+}
+
+#createDiscountModal form input:focus {
+  border-color: var(--primary-color);
+  background-color: var(--bg-card);
+  outline: none;
+}
+
+#createDiscountModal form .btn {
+  margin-top: 20px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#createDiscountModal form .btn-primary {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+}
+
+#createDiscountModal form .btn-primary:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Edit Discount Form */
+#editDiscountForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  font-family: Arial, sans-serif;
+  padding: 10px 20px;
+}
+
+#editDiscountForm label {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 1rem;
+}
+
+#editDiscountForm input[type="number"],
+#editDiscountForm input[type="date"] {
+  padding: 8px 10px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  color: var(--text-dark);
+}
+
+#editDiscountForm input[type="number"]:focus,
+#editDiscountForm input[type="date"]:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+#editDiscountForm .modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+#editDiscountForm .btn {
+  padding: 8px 16px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#editDiscountForm .btn-primary {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+}
+
+#editDiscountForm .btn-primary:hover {
+  background-color: var(--secondary-color);
+}
+
+#editDiscountForm .btn-secondary {
+  background-color: #ccc;
+  color: var(--text-dark);
+}
+
+#editDiscountForm .btn-secondary:hover {
+  background-color: #bbb;
+}
+
+/* Universal Modal Content */
+.modal-content {
+  background: var(--bg-light);
+  margin: auto;
+  padding: 30px 40px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: var(--shadow-medium);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+}
+
+/* Close Button */
+.modal-content .close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.modal-content .close:hover {
+  color: var(--secondary-color);
+}
+
+/* Modal Header */
+.modal-content h3 {
+  margin-bottom: 25px;
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 24px;
+}
+
+/* Campaign Form Layout */
+#createCampaignForm,
+#editCampaignForm {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Labels */
+#createCampaignForm label,
+#editCampaignForm label {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 16px;
+}
+
+/* Inputs and Selects */
+#createCampaignForm input,
+#editCampaignForm input,
+#createCampaignForm select,
+#editCampaignForm select {
+  padding: 10px 14px;
+  border: 1.8px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: var(--bg-card);
+  color: var(--text-dark);
+}
+
+#createCampaignForm input:focus,
+#editCampaignForm input:focus,
+#createCampaignForm select:focus,
+#editCampaignForm select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-light);
+}
+
+/* Email Inputs */
+input[type="email"] {
+  background: var(--bg-card);
+  border: 1.8px solid var(--border-color);
+  color: var(--text-dark);
+}
+
+input[type="email"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-light);
+}
+
+/* Submit Buttons */
+#createCampaignForm button.btn-primary,
+#editCampaignForm button.btn-success {
+  margin-top: 10px;
+  padding: 12px 0;
+  font-size: 18px;
+  font-weight: 700;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 10px;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+#createCampaignForm button.btn-primary:hover,
+#editCampaignForm button.btn-success:hover {
+  background-color: var(--secondary-color);
+}
+</style>
+
+
+      
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="pic/skin.jpg" alt="Logo" class="logo">
+               
+
+
+                <h3>SkinGlam Admin</h3>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#" data-section="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="#" data-section="users"><i class="fas fa-users"></i> User Management</a></li>
+                    <li><a href="#" data-section="dermatologists"><i class="fas fa-user-md"></i> Dermatologist Hub</a></li>
+                    <li><a href="#" data-section="products"><i class="fas fa-box"></i> Product Catalog</a></li>
+                    <li><a href="#" data-section="orders"><i class="fas fa-shopping-cart"></i> Order Fulfillment</a></li>
+                    <li><a href="#" data-section="marketing"><i class="fas fa-bullhorn"></i> Marketing & Promos</a></li>
+                    <li><a href="#" data-section="analytics"><i class="fas fa-chart-pie"></i> Analytics & Insights</a></li>
+                    <li><a href="#" data-section="comments-likes"><i class="fas fa-comments"></i> Comments & Likes</a></li>
+                    <li><a href="#" data-section="help"><i class="fas fa-question-circle"></i> Help & Support</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <p>&copy; 2025 SkinGlam</p>
+            </div>
+        </aside>
+
+        <div class="main-content-wrapper">
+            <header class="top-header">
+                <div class="header-left">
+                    <span class="current-section-title">Dashboard</span>
+                </div>
+                <div class="header-right">
+                    <div class="search-bar">
+                        <input type="text" id="panelSearchInput" placeholder="Search entire panel...">
+
+                        <i class="fas fa-search"></i>
+                    </div>
+                 
+                    <div class="admin-profile">
+                        <img src="pic/skin.jpg" alt="Admin" class="profile-pic">
+                        <span>Admin User</span>
+                        <i class="fas fa-caret-down"></i>
+                        <div class="profile-dropdown">
+                            <ul>
+                                <li><a href="admin_profile.php"><i class="fas fa-user-circle"></i> Profile</a></li>
+                                <li><a href="change_password.php"><i class="fas fa-key"></i> Change Password</a></li>
+                               <li><a href="#" onclick="window.location.href='logout.php'" class="logout-btn-dropdown"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+
+
+                            </ul>
+                        </div>
+                    </div>
+                   <button class="logout-btn" onclick="window.location.href='logout.php'">
+    <i class="fas fa-sign-out-alt"></i> Logout
+</button>
+
+                </div>
+            </header>
+
+            <main class="content-area">
+                <section id="dashboard" class="content-section active">
+                    <h2>Dashboard Overview</h2>
+              <div class="dashboard-grid">
+  <div class="card stat-card fade-in">
+    <h3>Total Users</h3>
+    <p id="totalUsers">12,345</p>
+    <i class="fas fa-users icon-bg"></i>
+  </div>
+  <div class="card stat-card fade-in delay-1">
+    <h3>Pending Orders</h3>
+    <p id="pendingOrders">42</p>
+    <i class="fas fa-shopping-cart icon-bg"></i>
+  </div>
+  <div class="card stat-card fade-in delay-2">
+    <h3>New Comments</h3>
+    <p id="newComments">18</p>
+    <i class="fas fa-comments icon-bg"></i>
+  </div>
+  
+  <div class="card stat-card fade-in delay-4">
+    <h3>Active Dermatologists</h3>
+    <p id="activeDermatologists">15</p>
+    <i class="fas fa-user-md icon-bg"></i>
+  </div>
+  <div class="card stat-card fade-in delay-5">
+    <h3>Product Skus</h3>
+    <p id="productSkus">230</p>
+    <i class="fas fa-tags icon-bg"></i>
+  </div>
+  
+</div>
+
+
+                   
+</section>
+
+   <section id="users" class="content-section">
+  <h2>User Management</h2>
+  <div class="action-bar">
+    <button class="btn btn-primary animate-btn" id="addUserBtn">
+      <i class="fas fa-user-plus"></i> Add New User
+    </button>
+    <input type="text" class="search-input" placeholder="Search users...">
+    <select class="filter-select">
+      <option value="all">All Roles</option>
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table fade-in">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Skin Type</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Example user rows -->
+         
+      </tbody>
+    </table>
+  </div>
+</section>
+<!-- User Modal -->
+<!-- User Modal -->
+<div id="add-edit-user-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModals()">&times;</span>
+    <h3 id="user-modal-title">Add New User</h3>
+    <form id="user-form" enctype="multipart/form-data"> <!-- Important for file upload -->
+      <input type="hidden" id="user-id-field" name="user_id">
+
+      <div class="form-group">
+        <label for="user-fname">First Name</label>
+        <input type="text" id="user-fname" name="fname" required>
+      </div>
+
+      <div class="form-group">
+        <label for="user-lname">Last Name</label>
+        <input type="text" id="user-lname" name="lname" required>
+      </div>
+
+      <div class="form-group">
+        <label for="user-name">Username</label>
+        <input type="text" id="user-name" name="username" required>
+      </div>
+
+      <div class="form-group">
+        <label for="user-email">Email</label>
+        <input type="email" id="user-email" name="email" required>
+      </div>
+
+      <div class="form-group" id="user-password-group">
+        <label for="user-password">Password</label>
+        <input type="password" id="user-password" name="password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="user-skin-type">Skin Type</label>
+        <select id="user-skin-type" name="skin_type" required>
+          <option value="">Select</option>
+          <option value="Normal">Normal</option>
+          <option value="Oily">Oily</option>
+          <option value="Dry">Dry</option>
+          <option value="Combination">Combination</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="user-role">Role</label>
+        <select id="user-role" name="role" required>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="user-profile">Profile Image</label>
+       <input type="file" id="user-profile" name="profile" accept="image/*" required>
+
+      </div>
+
+      <button type="submit" class="btn btn-success">Save</button>
+    </form>
+  </div>
+</div>
+<!-- View User Modal -->
+<div id="view-user-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModals()">&times;</span>
+    <h3>User Details</h3>
+    <img id="view-user-profile" src="" alt="Profile" style="width:100px;height:100px;border-radius:50%;margin-bottom:10px;">
+    <p><strong>Username:</strong> <span id="view-user-name"></span></p>
+    <p><strong>Email:</strong> <span id="view-user-email"></span></p>
+    <p><strong>Role:</strong> <span id="view-user-role"></span></p>
+    <p><strong>Skin Type:</strong> <span id="view-user-skin"></span></p>
+    <p><strong>First Name:</strong> <span id="view-user-fname"></span></p>
+    <p><strong>Last Name:</strong> <span id="view-user-lname"></span></p>
+  </div>
+</div>
+
+
+
+
+<!-- Dermatologist-->
+<section id="dermatologists" class="content-section">
+                    <h2>Dermatologist Hub</h2>
+                    <div class="action-bar">
+                        <button class="btn btn-primary animate-btn" id="addDermBtn"><i class="fas fa-user-plus"></i> Add New Dermatologist</button>
+                       <input type="text" class="search-input" id="dermSearchInput" placeholder="Search dermatologists...">
+
+                        <select class="filter-select" id="specialtyFilter">
+                            <option value="all">All Specialties</option>
+                            <option value="cosmetic"> Cosmetic Dermatology – Makeup Solutions</option>
+                            <option value="advice">Makeup Advice & Beauty Dermatology</option>
+                            <option value="skincare">Makeup & Skincare for Sensitive Skin</option>
+                             <option value="acne">Skin Treatments & Makeup for Acne-Prone Skin</option>
+                              <option value="analysis"> AI-Based Skin Analysis & Anti-Aging Makeup</option>
+                             
+                        </select>
+                    </div>
+              <div class="dermatologist-list grid-view fade-in">
+                <!-- Dermatologist cards will be inserted here -->
+                </div>
+                       
+                </section>
+               
+             
+    <div id="add-edit-derm-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModals()">&times;</span>
+    <h3 id="derm-modal-title">Add New Dermatologist</h3>
+    <form id="derm-form" enctype="multipart/form-data">
+      <input type="hidden" id="dermatologist-id-field" name="dermatologist_id">
+  <div class="form-group">
+    <label for="derm-fname">First Name</label>
+    <input type="text" id="derm-fname" name="fname" required>
+  </div>
+  <div class="form-group">
+    <label for="derm-lname">Last Name</label>
+    <input type="text" id="derm-lname" name="lname" required>
+  </div>
+      <div class="form-group">
+        <label for="derm-name">User Name</label>
+        <input type="text" id="derm-name" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="derm-password">Password</label>
+        <input type="password" id="derm-password" name="password">
+      </div>
+
+
+      <div class="form-group">
+        <label for="derm-phone">Phone Number</label>
+        <input type="text" id="derm-phone" name="phone_number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="derm-specialty">Specialty</label>
+        <input type="text" id="derm-specialty" name="specialty" required>
+      </div>
+
+    <div class="form-group">
+    <label for="derm-email">Contact Email</label>
+    <input type="email" id="derm-email" name="email" required>
+  </div>
+
+      <div class="form-group">
+        <label for="derm-location">Location</label>
+        <input type="text" id="derm-location" name="location" required>
+      </div>
+
+      <div class="form-group">
+        <label for="derm-profile">Profile Image</label>
+        <input type="file" id="derm-profile" name="profile" accept="image/*" >
+        <img id="profile-preview" style="display:none; max-width: 100px; margin-top: 10px;">
+      </div>
+
+      <div class="form-group">
+        <label for="derm-next-available">Next Available Date</label>
+        <input type="date" id="derm-next-available" name="next_available" required>
+      </div>
+      <div class="form-group">
+  <label for="derm-status">Status</label>
+  <select id="derm-status" name="status" required>
+    <option value="Active">Active</option>
+    <option value="Inactive">Inactive</option>
+    <option value="Pending" selected>Pending</option>
+  </select>
+</div>
+
+
+      <button type="submit" class="btn btn-success">Save</button>
+    </form>
+  </div>
+</div>
+<div id="view-derm-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeViewDermModal()">&times;</span>
+    <h3 id="view-derm-name"></h3>
+    <img id="view-derm-profile" style="max-width:150px; margin-bottom:10px;">
+
+<p><strong>First Name:</strong> <span id="view-derm-fname"></span></p>
+<p><strong>Last Name:</strong> <span id="view-derm-lname"></span></p>
+<p><strong>Username:</strong> <span id="view-derm-username"></span></p>
+<p><strong>Specialty:</strong> <span id="view-derm-specialty"></span></p>
+<p><strong>Phone Number:</strong> <span id="view-derm-phone"></span></p>
+<p><strong>Email:</strong> <span id="view-derm-email"></span></p>
+<p><strong>Location:</strong> <span id="view-derm-location"></span></p>
+<p><strong>Next Available:</strong> <span id="view-derm-next-available"></span></p>
+<p><strong>Status:</strong> <span id="view-derm-status"></span></p>
+  </div>
+</div>
+
+          
+              <!--Products-->  
+
+                <section id="products" class="content-section">
+                    <h2>Product Catalog</h2>
+                    <div class="action-bar">
+                        <button class="btn btn-primary animate-btn" id="addProductBtn"><i class="fas fa-plus-circle"></i> Add New Product</button>
+                        <input type="text" id="productSearchInput" class="search-input" placeholder="Search products...">
+
+                        <select class="filter-select">
+                            <option value="all">All Categories</option>
+                            <option value="serums">Serums</option>
+                            <option value="cleansers">Cleansers</option>
+                        </select>
+                       
+                    </div>
+                   <div class="product-grid fade-in"></div>
+
+                </section>
+<!-- Product Modal -->
+<div id="add-edit-product-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+   <span class="close-btn" onclick="closeModals()">&times;</span>
+    <h3 id="product-modal-title">Add New Product</h3>
+    <form id="product-form" enctype="multipart/form-data" method="POST">
+
+      <input type="hidden" id="product-id-field" name="product_id">
+      
+      <div class="form-group">
+        <label for="product-name">Name</label>
+        <input type="text" id="product-name" name="name" placeholder="Name" required>
+      </div>
+      <div class="form-group">
+        <label for="product-brand">Brand</label>
+        <input type="text" id="product-brand" name="brand" placeholder="Brand" required>
+      </div>
+      <div class="form-group">
+        <label for="product-category">Category</label>
+        <input type="text" id="product-category" name="category" placeholder="Category" required>
+      </div>
+     <div class="form-group">
+  <label for="product-skin-type">Skin Type</label>
+  <select id="product-skin-type" name="skin_type" required>
+    <option value="" disabled selected>Select Skin Type</option>
+    <option value="Oily">Oily</option>
+    <option value="Dry">Dry</option>
+    <option value="Combination">Combination</option>
+    <option value="Normal">Normal</option>
+    <option value="Sensitive">Sensitive</option>
+  </select>
+</div>
+
+      <div class="form-group">
+        <label for="product-price">Price</label>
+        <input type="number" id="product-price" name="price" placeholder="Price" step="0.01" required>
+      </div>
+      <div class="form-group">
+        <label for="product-stock">Stock Quantity</label>
+        <input type="number" id="product-stock" name="stock_quantity" placeholder="Stock" required>
+      </div>
+     <div class="form-group">
+  <label for="product-image">Image File</label>
+<input type="file" id="product-image" name="image_product" accept="image/*">
+<img class="image-preview1" style="max-width: 100px;">
+
+</div>
+<div class="form-group">
+  <label for="product-image2">Image 2 File</label>
+ <input type="file" id="product-image2" name="image2_product" accept="image/*">
+<img class="image-preview2" style="max-width: 100px;">
+
+</div>
+
+      <div class="form-group">
+        <label for="product-description">Description</label>
+        <textarea id="product-description" name="description" placeholder="Description"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-success">Save</button>
+    </form>
+  </div>
+</div>
+<div id="product-detail-modal" class="modal" style="display:none;">
+  <div class="modal-content" style="max-width:600px; position: relative;">
+    <span class="close-btn" onclick="closeProductDetailModal()" style="cursor:pointer; font-size:24px; position:absolute; top:10px; right:15px;">&times;</span>
+    <h3 id="detail-name"></h3>
+    <p><strong>Brand:</strong> <span id="detail-brand"></span></p>
+    <p><strong>Category:</strong> <span id="detail-category"></span></p>
+    <p><strong>Skin Type:</strong> <span id="detail-skin-type"></span></p>
+    <p><strong>Price:</strong> $<span id="detail-price"></span></p>
+    <p><strong>Stock Quantity:</strong> <span id="detail-stock"></span></p>
+    <p><strong>Description:</strong></p>
+    <p id="detail-description"></p>
+    <div style="display:flex; gap:10px;">
+      <img id="detail-image1" src="" alt="Product Image 1" style="max-width:200px; max-height:200px; object-fit:contain; border:1px solid #ccc; padding:5px;">
+      <img id="detail-image2" src="" alt="Product Image 2" style="max-width:200px; max-height:200px; object-fit:contain; border:1px solid #ccc; padding:5px; display:none;">
+    </div>
+  </div>
+</div>
+
+
+
+<section id="orders" class="content-section">
+    <h2>Order Fulfillment</h2>
+    <div class="action-bar">
+        
+        <input type="text" id="orderSearchInput" class="search-input" placeholder="Search orders by ID/customer...">
+        <button id="export-orders-btn" class="btn btn-success animate-btn">
+            <i class="fas fa-file-export"></i> Export Orders
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="data-table fade-in">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>User Name</th>
+                    <th>Order Date</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Payment Method</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+               <!--Orders will be loaded here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div id="order-detail-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span id="close-order-detail" class="close">&times;</span>
+        <div id="order-detail-content"></div>
+    </div>
+</div>
+
+
+
+
+                <section id="marketing" class="content-section">
+                    <h2>Marketing & Promotions</h2>
+                    <div class="tabs">
+                        <button class="tab-button active" data-tab="discounts">Discounts</button>
+                        <button class="tab-button" data-tab="campaigns">Email Campaigns</button>
+                    </div>
+
+                    <div id="discounts" class="tab-content active fade-in">
+                        <h3>Discount Code Management</h3>
+                        <div class="action-bar">
+                            <button class="btn btn-primary animate-btn" id="createDiscountBtn"><i class="fas fa-plus"></i> Create New Discount</button>
+                          <input type="text" id="discountSearch" class="search-input" placeholder="Search codes...">
+
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Product ID</th>
+                                        <th>Discount (%)</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!--
+                                     <tr>
+                                        <td>SAVE15</td>
+                                        <td>Percentage</td>
+                                        <td>15%</td>
+                                        <td>100</td>
+                                        <td>2025-12-31</td>
+                                        <td><span class="status-active">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning tooltip" data-tooltip="Edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger tooltip" data-tooltip="Deactivate"><i class="fas fa-ban"></i></button>
+                                        </td>
+                                    </tr>
+                                    -->
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+<div id="createDiscountModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h3>Create New Discount</h3>
+    <form id="discountForm">
+      <label for="product_id">Product ID:</label>
+      <input id="product_id" type="number" name="product_id" required>
+      
+      <label for="discount_percentage">Discount Percentage:</label>
+      <input id="discount_percentage" type="number" step="0.01" name="discount_percentage" required>
+      
+      <label for="start_date">Start Date:</label>
+      <input id="start_date" type="date" name="start_date" required>
+      
+      <label for="end_date">End Date:</label>
+      <input id="end_date" type="date" name="end_date" required>
+      
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+    </form>
+  </div>
+</div>
+<!-- Edit Discount Modal -->
+<div id="editDiscountModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeEditModal()">&times;</span>
+    <h2>Edit Discount</h2>
+    <form id="editDiscountForm">
+      <input type="hidden" name="sale_id" id="edit_sale_id" />
+      
+      <label for="edit_product_id">Product ID</label>
+      <input type="number" name="product_id" id="edit_product_id" required />
+      
+      <label for="edit_discount_percentage">Discount Percentage (%)</label>
+      <input type="number" name="discount_percentage" id="edit_discount_percentage" min="0" max="100" required />
+      
+      <label for="edit_start_date">Start Date</label>
+      <input type="date" name="start_date" id="edit_start_date" required />
+      
+      <label for="edit_end_date">End Date</label>
+      <input type="date" name="end_date" id="edit_end_date" required />
+      
+      <div class="modal-buttons">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+                    <div id="campaigns" class="tab-content fade-in">
+                        <h3>Email Campaign Manager</h3>
+                        <div class="action-bar">
+                          <button id="openCreateModal" class="btn btn-primary animate-btn">
+                      <i class="fas fa-paper-plane"></i> Create New Campaign
+                         </button>
+
+                            
+                        </div>
+                       <div class="campaign-list">
+  <!-- Campaign items will be loaded here dynamically -->
+</div>
+
+<!-- Create Campaign Modal -->
+<div id="createCampaignModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h3>Create New Campaign</h3>
+    <form id="createCampaignForm">
+      <label for="title">📧 Campaign Title:</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="status">⚙️ Status:</label>
+      <select id="status" name="status">
+        <option value="Draft">Draft</option>
+        <option value="Active">Active</option>
+        <option value="Paused">Paused</option>
+      </select>
+
+      <label for="last_sent">📅 Last Sent Date:</label>
+      <input type="date" id="last_sent" name="last_sent">
+
+      <label for="opens_percentage">📊 Open Rate (%):</label>
+      <input type="number" id="opens_percentage" name="opens_percentage" min="0" max="100" value="0">
+
+      <label for="recipient">👤 Recipient Email:</label>
+      <input type="email" id="recipient" name="recipient" required>
+
+      <button type="submit" class="btn btn-primary">Create Campaign</button>
+    </form>
+  </div>
+</div>
+
+<!-- View Reports Modal -->
+<div id="reportModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeReportModal()">&times;</span>
+    <h3>Campaign Report</h3>
+    <div id="reportContent">
+      <!-- Report details will load here dynamically -->
+    </div>
+  </div>
+</div>
+<!-- Edit Campaign Modal -->
+<div id="editCampaignModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeEditModal()">&times;</span>
+    <h3>Edit Campaign</h3>
+    <form id="editCampaignForm">
+      <input type="hidden" id="edit_campaign_id" name="campaign_id">
+
+      <label for="edit_title">📧 Campaign Title:</label>
+      <input type="text" id="edit_title" name="title" required>
+
+      <label for="edit_status">⚙️ Status:</label>
+      <select id="edit_status" name="status">
+        <option value="Draft">Draft</option>
+        <option value="Active">Active</option>
+        <option value="Paused">Paused</option>
+      </select>
+
+      <label for="edit_last_sent">📅 Last Sent Date:</label>
+      <input type="date" id="edit_last_sent" name="last_sent">
+
+      <label for="edit_opens_percentage">📊 Open Rate (%):</label>
+      <input type="number" id="edit_opens_percentage" name="opens_percentage" min="0" max="100">
+
+      <label for="edit_recipient">👤 Recipient Email:</label>
+      <input type="email" id="edit_recipient" name="recipient" required>
+
+      <button type="submit" class="btn btn-success">Update Campaign</button>
+    </form>
+  </div>
+</div>
+
+
+</section>
+           </section>
+                
+<section id="analytics" class="content-section">
+    <h2>Analytics & Insights</h2>
+
+    <!-- Metrics Cards -->
+    <div class="metrics-grid">
+        <div class="card metric-card fade-in">
+            <h3>Conversion Rate</h3>
+            <p id="conversion-rate">Loading...</p>
+        </div>
+        <div class="card metric-card fade-in">
+            <h3>Avg Order Value</h3>
+            <p id="avg-order-value">Loading...</p>
+        </div>
+        <div class="card metric-card fade-in">
+            <h3>Website Traffic</h3>
+            <p id="website-traffic">Loading...</p>
+        </div>
+        <div class="card metric-card fade-in">
+            <h3>Top Selling Product</h3>
+            <p id="top-selling-product">Loading...</p>
+        </div>
+    </div>
+
+    <!-- Chart Cards -->
+    <div class="charts-container">
+        <div class="card chart-card fade-in">
+            <h3>Product Sales by Category</h3>
+            <div style="height: 300px;">
+                <canvas id="categorySalesChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="card chart-card fade-in">
+            <h3>Weekly User Registrations</h3>
+            <div style="height: 300px;">
+                <canvas id="registrationsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Report Generator -->
+    <div class="card fade-in" style="margin-top: 30px;">
+    <h3>Custom Reports</h3>
+    <div class="form-group">
+        <label for="report-start-date">Start Date:</label>
+        <input type="date" id="report-start-date" class="datepicker">
+    </div>
+    <div class="form-group">
+        <label for="report-end-date">End Date:</label>
+        <input type="date" id="report-end-date" class="datepicker">
+    </div>
+    <button class="btn btn-primary animate-btn" onclick="generateCustomReport()">
+        <i class="fas fa-download"></i> Generate Custom Report
+    </button>
+    <div id="report-result" style="margin-top: 15px;"></div>
+</div>
+</section>
+<section id="comments-likes" class="content-section">
+  <h2>Comments & Likes</h2>
+  <div class="comments-list fade-in" id="commentsLikesContainer">
+    <!-- Dynamic content inserted here -->
+  </div>
+</section>
+
+<script>
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+  };
+  return String(text).replace(/[&<>"']/g, m => map[m]);
+}
+
+function formatDate(rawDate) {
+  const date = new Date(rawDate);
+  return date.toLocaleDateString();
+}
+
+function confirmAndSubmit(button) {
+  if (confirm("Are you sure you want to delete?")) {
+    button.closest('form').submit();
+  }
+}
+
+
+async function fetchCommentsLikes() {
+  try {
+    const response = await fetch('fetch_comments_likes.php');
+    const data = await response.json();
+
+    if (!data.success) {
+      document.getElementById('commentsLikesContainer').innerHTML = `<p>Error loading data</p>`;
+      return;
+    }
+
+    let html = '';
+
+    data.comments.forEach(comment => {
+      html += `
+        <div class="comment-item">
+          <div class="comment-header">
+            <h5>User: <strong>${escapeHtml(comment.username || 'Unknown')}</strong> on 
+              <em>${escapeHtml(comment.product?.name || 'Unknown Product')}</em>
+            </h5>
+            <span class="comment-date">${formatDate(comment.comment_date)}</span>
+          </div>
+          <p class="comment-text">"${escapeHtml(comment.comment_text)}"</p>
+          <div class="comment-actions">
+            <form method="POST" action="delete_comment.php">
+              <input type="hidden" name="comment_id" value="${comment.comment_id}">
+              <button type="button" class="btn btn-danger" onclick="confirmAndSubmit(this)">
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </form>
+          </div>
+        </div>
+      `;
+    });
+
+    data.likes.forEach(like => {
+      html += `
+        <div class="comment-item">
+          <div class="comment-header">
+            <h5>User: <strong>${escapeHtml(like.username || 'Unknown')}</strong> liked 
+              <em>${escapeHtml(like.product?.name || 'Unknown Product')}</em>
+            </h5>
+            <span class="comment-date">${formatDate(like.liked_at)}</span>
+          </div>
+          <p class="comment-text"><i class="fas fa-heart text-danger"></i> Liked this product</p>
+          <div class="comment-actions">
+            <form method="POST" action="delete_like.php">
+              <input type="hidden" name="like_id" value="${like.like_id}">
+              <button type="button" class="btn btn-danger" onclick="confirmAndSubmit(this)">
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </form>
+          </div>
+        </div>
+      `;
+    });
+
+    document.getElementById('commentsLikesContainer').innerHTML = html;
+
+  } catch (error) {
+    console.error('Fetch error:', error);
+    document.getElementById('commentsLikesContainer').innerHTML = `<p>Error fetching data.</p>`;
+  }
+}
+
+// Load comments and likes on page load
+fetchCommentsLikes();
+</script>
+
+                 
+
+<!-- Platform Setting-->
+ <!--
+                <section id="settings" class="content-section">
+                    <h2>Platform Settings</h2>
+                    <div class="tabs">
+                        <button class="tab-button active" data-tab="general-settings">General</button>
+                        <button class="tab-button" data-tab="security-settings">Security</button>
+                    </div>
+
+                    <div id="general-settings" class="tab-content active fade-in">
+                        <h3>General Site Settings</h3>
+                        <div class="form-group">
+                            <label for="site-name">Website Name:</label>
+                            <input type="text" id="site-name" value="DermGlam">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email">Contact Email:</label>
+                            <input type="email" id="contact-email" value="info@dermglam.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="currency">Currency:</label>
+                            <select id="currency">
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                            </select>
+                        </div>
+                        <button id="save-settings-btn" class="btn btn-primary animate-btn"><i class="fas fa-save"></i> Save General Settings</button>
+                    </div>
+
+                    <div id="security-settings" class="tab-content fade-in">
+                        <h3>Security & Access Control</h3>
+                        <div class="form-group checkbox-group">
+                            <label for="two-factor">Enable Two-Factor Authentication for Admins</label>
+                            <input type="checkbox" id="two-factor" checked>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label for="strict-password">Enforce Strong Passwords</label>
+                            <input type="checkbox" id="strict-password">
+                        </div>
+                        <div class="form-group">
+                            <label for="session-timeout">Session Timeout (minutes):</label>
+                            <input type="number" id="session-timeout" value="60">
+                        </div>
+                        <button class="btn btn-primary animate-btn"><i class="fas fa-save"></i> Update Security Settings</button>
+                    </div>
+
+                  
+
+
+                </section>-->
+                
+           <section id="help" class="content-section">
+  <h2>Help & Support</h2>
+
+  <div class="card fade-in">
+    <h3>Quick Guides</h3>
+    <ul id="guides-list">
+      <li>Loading guides...</li>
+    </ul>
+  </div>
+
+  <div class="card fade-in">
+    <h3>Contact Support</h3>
+    <p><i class="fas fa-envelope"></i> support@skinglam.com</p>
+    <p><i class="fas fa-phone"></i> +1 (800) 123-4567</p>
+  </div>
+
+  <div class="card fade-in">
+    <h3>System Status</h3>
+    <p id="system-status">Checking system status...</p>
+    <p id="last-updated">Last Updated: ...</p>
+  </div>
+</section>
+
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Search and specialty for dermatologist-->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const searchInput = document.getElementById('dermSearchInput');
+  const specialtyFilter = document.getElementById('specialtyFilter'); // Add the ID to your <select>
+  const dermList = document.querySelector('.dermatologist-list');
+
+  function filterDermatologists() {
+    const nameFilter = searchInput.value.toLowerCase();
+    const specialtyValue = specialtyFilter.value.toLowerCase();
+    const cards = dermList.querySelectorAll('.derm-card');
+
+    cards.forEach(card => {
+      const name = card.querySelector('h3').textContent.toLowerCase();
+      const specialty = card.querySelector('p').textContent.toLowerCase(); // assuming specialty is inside a <p>
+
+      const matchesName = name.includes(nameFilter);
+      const matchesSpecialty = (specialtyValue === 'all') || specialty.includes(specialtyValue);
+
+      card.style.display = (matchesName && matchesSpecialty) ? 'block' : 'none';
+    });
+  }
+
+  searchInput.addEventListener('keyup', filterDermatologists);
+  specialtyFilter.addEventListener('change', filterDermatologists);
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const filterSelect = document.querySelector('.filter-select');
+  const ordersTableBody = document.getElementById('orders-table-body');
+
+  // Function to fetch and load orders based on selected status
+  function loadOrders(status) {
+    ordersTableBody.innerHTML = '<tr><td colspan="8">Loading orders...</td></tr>';
+
+    fetch(`fetch_orders.php?status=${encodeURIComponent(status)}`)
+      .then(response => response.text())
+      .then(html => {
+        ordersTableBody.innerHTML = html;
+      })
+      .catch(error => {
+        console.error('Error fetching orders:', error);
+        ordersTableBody.innerHTML = '<tr><td colspan="8">Error loading orders</td></tr>';
+      });
+  }
+
+  // Load orders initially with default 'all' status
+  loadOrders(filterSelect.value);
+
+  // Update orders when the filter changes
+  filterSelect.addEventListener('change', () => {
+    loadOrders(filterSelect.value);
+  });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const list = document.getElementById('guides-list');
+  list.innerHTML = "<li>Loading guides...</li>";
+
+  // ✅ Fetch help guides from PHP
+  fetch('fetch_guides.php')
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to fetch guides.");
+      return res.json();
+    })
+    .then(data => {
+      list.innerHTML = ""; // Clear loading text
+
+      if (data.length === 0) {
+        list.innerHTML = "<li>No help guides available right now.</li>";
+        return;
+      }
+
+      data.forEach(guide => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="${guide.link}" target="_blank"><i class="${guide.icon_class}"></i> ${guide.title}</a>`;
+        list.appendChild(li);
+      });
+    })
+    .catch(error => {
+      console.error("Error loading guides:", error);
+      list.innerHTML = "<li>Error loading help guides. Please try again later.</li>";
+    });
+
+  // ✅ Simulated system status update
+  const statusEl = document.getElementById('system-status');
+  const updateEl = document.getElementById('last-updated');
+  const now = new Date();
+
+  statusEl.innerHTML = `All systems operational. <span class="status-active">Green</span>`;
+  updateEl.innerText = `Last Updated: ${now.toLocaleString()}`;
+});
+</script>
+    <script src="campaigns.js"></script>
+    <script src="discount.js"></script>
+      <script src="product.js"></script>
+       <script src="orderExport.js"></script>
+       <script src="users.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="d.js"></script>
+       <script src="sitesetting.js"></script>
+       <script src="script.js"></script>
+         <script src="dermatologist.js"></script>
+         <script src="dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+</body>
+</html>

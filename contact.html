@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact Us | SkinGlam</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* نفس التنسيق اللي قبل */
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0; padding: 0;
+      background-color: #fff;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #ff69b4;
+      color: white;
+      padding: 60px 20px 40px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgb(255 105 180 / 0.3);
+    }
+    header h1 {
+      margin-bottom: 10px;
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+    header p {
+      font-size: 1.3rem;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .contact-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 50px 20px 80px;
+    }
+    .contact-info {
+      background: #fff0f6;
+      border-radius: 15px;
+      padding: 30px 25px 40px;
+      box-shadow: 0 8px 20px rgb(255 105 180 / 0.15);
+      transition: box-shadow 0.3s ease;
+    }
+    .contact-info:hover {
+      box-shadow: 0 12px 30px rgb(255 105 180 / 0.3);
+    }
+
+    .contact-info h3 {
+      color: #ff2d8b;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      border-bottom: 3px solid #ff69b4;
+      padding-bottom: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .contact-info p {
+      margin-bottom: 15px;
+      font-size: 1.05rem;
+      color: #333;
+    }
+    .contact-info p i {
+      margin-right: 12px;
+      color: #ff69b4;
+      min-width: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+    .social-icons {
+      margin-top: 10px;
+      font-size: 26px;
+    }
+    .social-icons a {
+      margin-right: 18px;
+      color: #ff69b4;
+      transition: transform 0.2s, color 0.3s;
+      display: inline-block;
+    }
+    .social-icons a:hover {
+      color: #d63384;
+      transform: scale(1.2);
+    }
+    .social-icons a.facebook { color: #3b5998; }
+    .social-icons a.facebook:hover { color: #2d4373; }
+    .social-icons a.youtube { color: #ff0000; }
+    .social-icons a.youtube:hover { color: #cc0000; }
+    .social-icons a.pinterest { color: #bd081c; }
+    .social-icons a.pinterest:hover { color: #900614; }
+
+    iframe {
+      width: 100%;
+      height: 280px;
+      border: none;
+      border-radius: 12px;
+      margin-top: 25px;
+      box-shadow: 0 4px 20px rgb(0 0 0 / 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    iframe:hover {
+      box-shadow: 0 8px 40px rgb(0 0 0 / 0.15);
+    }
+
+    .working-hours {
+      margin-top: 30px;
+      background: #ffd6e7;
+      border-radius: 12px;
+      padding: 15px 20px;
+      box-shadow: 0 4px 15px rgb(255 105 180 / 0.15);
+      max-width: 400px;
+    }
+    .working-hours h4 {
+      margin-bottom: 12px;
+      color: #d63384;
+      font-weight: 700;
+    }
+    .working-hours p {
+      margin: 4px 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .back-home {
+      text-align: center;
+      margin: 60px 0 40px;
+    }
+    .back-home a {
+      background-color: #ff69b4;
+      color: white;
+      text-decoration: none;
+      padding: 14px 30px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 5px 15px rgb(255 105 180 / 0.6);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .back-home a:hover {
+      background-color: #d63384;
+      box-shadow: 0 6px 20px rgb(214 51 132 / 0.9);
+    }
+    .back-home a i {
+      font-size: 1.3rem;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Contact SkinGlam</h1>
+  <p>We're here to help you glow!</p>
+</header>
+
+<div class="contact-container">
+
+  <div class="contact-info">
+    <h3>Reach Us</h3>
+    <p><i class="fas fa-envelope"></i> support@skinglam.com</p>
+    <p><i class="fas fa-phone-alt"></i> +961 76 810 314 &nbsp;&nbsp;&nbsp; +961 328 922</p>
+    <p><i class="fas fa-map-marker-alt"></i> Beirut, Lebanon</p>
+
+    <h3>Follow Us</h3>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/skinglam" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.facebook.com/skinglam" target="_blank" aria-label="Facebook" class="facebook"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.youtube.com/@skinglam" target="_blank" aria-label="YouTube" class="youtube"><i class="fab fa-youtube"></i></a>
+      <a href="https://www.pinterest.com/skinglam" target="_blank" aria-label="Pinterest" class="pinterest"><i class="fab fa-pinterest"></i></a>
+    </div>
+
+    <h3>Visit SkinGlam</h3>
+    <p class="visit-us-subtitle">Find us at ABC Verdun Mall for the best skincare and makeup experience.</p>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6660.043979661766!2d35.4850263!3d33.8874843!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151f17280e4a1cf3%3A0x4a6ea800f728f3c3!2sABC%20Verdun!5e0!3m2!1sen!2slb!4v1720695297890!5m2!1sen!2slb"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="SkinGlam Location"
+    ></iframe>
+
+    <div class="working-hours">
+      <h4>Working Hours</h4>
+      <p>Monday - Friday: 9:00 AM – 8:00 PM</p>
+      <p>Saturday: 10:00 AM – 6:00 PM</p>
+      <p>Sunday: Closed</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="back-home">
+  <a href="test.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+</div>
+
+</body>
+</html>

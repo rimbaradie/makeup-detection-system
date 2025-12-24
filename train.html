@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Makeup Product Safety Analysis</title>
+<style>
+    /* Same styling as before for clean look */
+    body, h1, h2, p, pre, form {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+        background: #f8f5f2;
+        color: #333;
+        padding: 30px;
+        max-width: 700px;
+        margin: auto;
+    }
+    h1 {
+        color: #b35081;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 700;
+    }
+    form {
+        background: #fff;
+        padding: 20px 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(179, 80, 129, 0.3);
+        margin-bottom: 30px;
+    }
+    label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 8px;
+        color: #7a3e5b;
+    }
+    input[type="text"] {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 1rem;
+        border: 2px solid #b35081;
+        border-radius: 6px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+        transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus {
+        border-color: #853963;
+        outline: none;
+    }
+    input[type="submit"] {
+        background-color: #b35081;
+        color: white;
+        font-weight: 700;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
+    input[type="submit"]:hover {
+        background-color: #853963;
+    }
+    p.error {
+        color: #d9534f;
+        font-weight: 600;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    h2 {
+        color: #b35081;
+        margin-bottom: 10px;
+        font-weight: 700;
+        text-align: center;
+    }
+    pre {
+        background-color: #fff0f5;
+        padding: 15px;
+        border-radius: 6px;
+        border: 1px solid #e6cfe5;
+        font-size: 0.95rem;
+        overflow-x: auto;
+        margin-bottom: 15px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    p strong {
+        color: #7a3e5b;
+    }
+    .results {
+        background: #fff;
+        padding: 20px 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(179, 80, 129, 0.3);
+    }
+    #loading {
+        display: none;
+        text-align: center;
+        margin-bottom: 15px;
+        color: #b35081;
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+    <h1>Makeup Product Safety Analysis</h1>
+    
+    <form id="analysisForm" method="post" action="">
+        <label for="product_name">Enter Product Name:</label>
+        <input type="text" name="product_name" id="product_name" required>
+        <input type="submit" value="Analyze">
+    </form>
+
+    <div id="loading">Analyzing... Please wait.</div>
+    <p class="error" id="error" style="display:none;"></p>
+
+    <div id="results" class="results" style="display:none;">
+        <h2 id="resultTitle"></h2>
+        <p><strong>Ingredients:</strong></p>
+        <pre id="ingredientsList"></pre>
+
+        <p><strong>Detected Harmful Ingredients:</strong> <span id="detectedHarmful"></span></p>
+        <p><strong>Safety Score:</strong> <span id="safetyScore"></span>/100</p>
+        <p><strong>Dermatologist Assessment:</strong> <span id="assessment"></span></p>
+    </div>
+
+<script>
+document.getElementById('analysisForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const productNameInput = document.getElementById('product_name');
+    const errorElem = document.getElementById('error');
+    const loadingElem = document.getElementById('loading');
+    const resultsElem = document.getElementById('results');
+
+    errorElem.style.display = 'none';
+    resultsElem.style.display = 'none';
+
+    const productName = productNameInput.value.trim();
+    if (!productName) {
+        errorElem.textContent = 'Please enter a product name.';
+        errorElem.style.display = 'block';
+        return;
+    }
+
+    loadingElem.style.display = 'block';
+
+    fetch('analyze.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({product_name: productName})
+    })
+    .then(response => response.json())
+    .then(data => {
+        loadingElem.style.display = 'none';
+
+        if (data.error) {
+            errorElem.textContent = data.error;
+            errorElem.style.display = 'block';
+            return;
+        }
+
+        // Show results
+        resultsElem.style.display = 'block';
+        document.getElementById('resultTitle').textContent = `Analysis for: ${data.product_name}`;
+        document.getElementById('ingredientsList').textContent = data.ingredient_list;
+        document.getElementById('detectedHarmful').textContent = data.detected.length ? data.detected.join(', ') : 'None';
+        document.getElementById('safetyScore').textContent = data.score;
+        document.getElementById('assessment').textContent = data.assessment;
+    })
+    .catch(() => {
+        loadingElem.style.display = 'none';
+        errorElem.textContent = 'An error occurred while analyzing. Please try again.';
+        errorElem.style.display = 'block';
+    });
+});
+</script>
+</body>
+</html>

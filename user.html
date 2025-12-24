@@ -1,0 +1,2802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermGlam - Makeup Recommended by Dermatologists</title>
+    <style>/* Variables for consistent theming */
+:root {
+    --primary-color: #1abc9c; /* Teal/Green for main actions, highlights */
+    --secondary-color: #34495e; /* Dark blue/grey for text, backgrounds */
+    --accent-color: #f39c12; /* Orange for warnings, special tags */
+    --bg-light: #f4f7f6; /* Light background for sections */
+    --bg-white: #ffffff; /* White background for cards, modals */
+    --text-dark: #333;
+    --text-light: #ecf0f1;
+    --border-color: #e0e0e0;
+    --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --info-color: #3498db;
+    --warning-color: #f39c12;
+}
+
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #16a085;
+}
+
+ul {
+    list-style: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #16a085;
+    box-shadow: 0 4px 10px rgba(26, 188, 156, 0.3);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #2c3e50;
+    box-shadow: 0 4px 10px rgba(52, 73, 94, 0.2);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+.btn-outline:hover {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 10px rgba(26, 188, 156, 0.2);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+}
+.btn-success:hover {
+    background-color: #27ae60;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+    color: white;
+}
+.btn-warning:hover {
+    background-color: #e67e22;
+}
+
+.btn-sm {
+    padding: 8px 15px;
+    font-size: 0.85em;
+    border-radius: 4px;
+}
+
+/* Main Header */
+.main-header {
+    background-color: var(--bg-white);
+    padding: 15px 0;
+    box-shadow: var(--shadow-light);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.logo h1 {
+    font-size: 1.8em;
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+.main-nav ul {
+    display: flex;
+    gap: 25px;
+}
+
+.main-nav a {
+    color: var(--text-dark);
+    font-weight: 500;
+    padding: 5px 0;
+    position: relative;
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.main-nav a.active::after,
+.main-nav a:hover::after {
+    width: 100%;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-box input {
+    border: 1px solid var(--border-color);
+    padding: 8px 15px 8px 35px;
+    border-radius: 20px;
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+    width: 200px;
+}
+
+.search-box input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
+    outline: none;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    color: #999;
+}
+
+.cart-btn {
+    background: none;
+    border: none;
+    font-size: 1.4em;
+    color: var(--secondary-color);
+    cursor: pointer;
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 0.7em;
+    padding: 3px 7px;
+    border-radius: 50%;
+    min-width: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.menu-toggle {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    color: var(--secondary-color);
+    cursor: pointer;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+}
+
+.mobile-menu-overlay.open {
+    transform: translateX(0);
+}
+
+.close-mobile-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 3em;
+    color: white;
+    cursor: pointer;
+}
+
+.mobile-nav ul {
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+}
+
+.mobile-nav a {
+    font-size: 1.8em;
+    color: white;
+    font-weight: 600;
+}
+
+/* Main Content Sections */
+main section {
+    padding: 80px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+main section.active-section {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+main section.hidden-section {
+    display: none; /* Hide via display to remove from layout */
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://via.placeholder.com/1600x600/1abc9c/ffffff?text=DermGlam+Hero') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content h2 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.hero-content p {
+    font-size: 1.4em;
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-buttons .btn {
+    margin: 0 10px;
+    padding: 15px 35px;
+    font-size: 1.1em;
+}
+
+/* Section Headings & Descriptions */
+h2 {
+    font-size: 2.8em;
+    color: var(--secondary-color);
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
+
+.section-description {
+    text-align: center;
+    font-size: 1.1em;
+    color: #666;
+    max-width: 800px;
+    margin: 0 auto 50px;
+}
+
+/* Product Section */
+.products-section {
+    background-color: var(--bg-light);
+}
+
+.product-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 40px;
+    background-color: var(--bg-white);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: var(--secondary-color);
+    font-size: 0.95em;
+}
+
+.filter-group select {
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 1em;
+    color: var(--text-dark);
+    appearance: none; /* Remove default arrow */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.1L146.2%20220.3%2018.5%2074.5a17.6%2017.6%200%200%200-25.3%2023.7l137.2%20146.8c4.3%204.4%2010.5%206.9%2017%206.9s12.7-2.6%2017-6.9L287%2093.5a17.6%2017.6%200%200%200%200-24.1c-6.6-6.6-17.5-6.6-24.1%200z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 12px auto;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background-color: var(--bg-white);
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+}
+
+.product-card img {
+    max-width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.product-card h3 {
+    font-size: 1.4em;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+    height: 2.8em; /* Fixed height for consistent layout */
+    overflow: hidden;
+}
+
+.product-card .price {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.product-card .tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.product-card .tag {
+    background-color: #e0f2f1;
+    color: var(--primary-color);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.product-card .tag.ingredient {
+    background-color: #fce4ec;
+    color: #e91e63; /* Pink for ingredients */
+}
+
+.product-card .expert-comment {
+    background-color: #f8f9fa;
+    border-left: 3px solid var(--primary-color);
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    text-align: left;
+    font-size: 0.9em;
+    color: #555;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    border-radius: 0 5px 5px 0;
+}
+.product-card .expert-comment i {
+    color: var(--primary-color);
+    font-size: 1.2em;
+    flex-shrink: 0;
+    padding-top: 2px;
+}
+
+.product-card .product-rating {
+    margin-bottom: 15px;
+    color: #FFD700; /* Gold stars */
+    font-size: 1.1em;
+}
+
+.product-card .product-rating .far.fa-star {
+    color: #ccc; /* Unfilled stars */
+}
+
+.product-card .btn-add-to-cart {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1.1em;
+}
+
+/* AI Skin Analyzer Section */
+.analyzer-section {
+    background-color: var(--bg-white);
+}
+
+.analyzer-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.step-card {
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+}
+
+.step-card i {
+    font-size: 3em;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.step-card h3 {
+    font-size: 1.5em;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.step-card p {
+    color: #666;
+}
+
+.analyzer-interface {
+    max-width: 800px;
+    margin: 0 auto 40px;
+    background-color: var(--bg-light);
+    border-radius: 10px;
+    box-shadow: var(--shadow-medium);
+    padding: 30px;
+    text-align: center;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-top: 75%; /* 4:3 Aspect Ratio for video */
+    background-color: black;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+#webcam-feed, #analyzer-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+#analyzer-canvas {
+    border: 2px solid var(--primary-color);
+    transform: scaleX(-1); /* Flip horizontally for selfie view */
+}
+
+.analyzer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.analyzer-results {
+    background-color: var(--bg-white);
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.analyzer-results h3 {
+    text-align: left;
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.analyzer-results p {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.analyzer-results strong {
+    color: var(--primary-color);
+}
+
+#recommended-products-list {
+    margin-top: 15px;
+    padding-left: 20px;
+}
+
+#recommended-products-list li {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.save-analysis-btn {
+    margin-top: 25px;
+    width: auto;
+    padding: 10px 20px;
+}
+
+.privacy-note {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 20px;
+    text-align: center;
+}
+.privacy-note i {
+    margin-right: 5px;
+    color: var(--info-color);
+}
+
+.quiz-fallback {
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px dashed var(--border-color);
+    margin-top: 50px;
+}
+.quiz-fallback h3 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+.quiz-fallback p {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+.quiz-start-btn {
+    padding: 12px 30px;
+    font-size: 1.1em;
+}
+
+/* Modal (Quiz / Review) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    padding: 20px;
+}
+
+.modal-content {
+    background-color: var(--bg-white);
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-medium);
+    width: 90%;
+    max-width: 600px; /* Adjust max-width as needed */
+    position: relative;
+    animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal .close-button {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal .close-button:hover,
+.modal .close-button:focus {
+    color: var(--danger-color);
+}
+
+.modal h3 {
+    color: var(--secondary-color);
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    font-size: 2em;
+    text-align: center;
+}
+
+/* Quiz specific styles */
+.quiz-question {
+    display: none;
+    margin-bottom: 20px;
+    animation: fadeIn 0.4s ease-out;
+}
+.quiz-question.active-question {
+    display: block;
+}
+.quiz-question h4 {
+    font-size: 1.4em;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+.quiz-question .options label {
+    display: block;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+    font-size: 1.1em;
+}
+.quiz-question .options label:hover {
+    background-color: #eef5f4;
+    border-color: var(--primary-color);
+}
+.quiz-question .options input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+    accent-color: var(--primary-color);
+}
+
+.quiz-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+#quiz-results {
+    margin-top: 30px;
+    text-align: left;
+    background-color: #eef5f4;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+}
+#quiz-results h3 {
+    text-align: left;
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    color: var(--primary-color);
+}
+#quiz-results p {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+#quiz-results strong {
+    color: var(--secondary-color);
+}
+#quiz-recommended-products-list {
+    padding-left: 20px;
+    margin-top: 15px;
+}
+#quiz-recommended-products-list li {
+    margin-bottom: 5px;
+    color: #555;
+}
+.view-products-btn {
+    margin-top: 20px;
+}
+
+
+/* Review Modal Specific Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: white;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+}
+
+.stars {
+    font-size: 1.8em;
+    color: #FFD700; /* Gold for stars */
+    cursor: pointer;
+}
+.stars i {
+    margin-right: 5px;
+    transition: color 0.2s ease;
+}
+.stars i.filled {
+    color: #FFD700;
+}
+.stars i.empty {
+    color: #ccc;
+}
+.stars i:hover {
+    color: #FFC107; /* Slightly brighter on hover */
+}
+
+
+/* Blog Section */
+.blog-section {
+    background-color: var(--bg-light);
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.blog-post {
+    background-color: var(--bg-white);
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blog-post:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+}
+
+.blog-post img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.blog-post h3 {
+    font-size: 1.5em;
+    color: var(--secondary-color);
+    margin: 15px 20px 10px;
+    line-height: 1.3;
+}
+
+.blog-post .blog-meta {
+    font-size: 0.9em;
+    color: #888;
+    margin: 0 20px 15px;
+}
+
+.blog-post p {
+    font-size: 1em;
+    color: #555;
+    margin: 0 20px 20px;
+    min-height: 4.8em; /* To keep card height consistent */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.blog-post .btn {
+    margin: 0 20px 20px;
+}
+
+/* Dermatologist Panel Section */
+.dermatologists-section {
+    background-color: var(--bg-white);
+}
+
+.dermatologist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.derm-card {
+    background-color: var(--bg-light);
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+    padding: 30px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.derm-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-medium);
+}
+
+.derm-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 4px solid var(--primary-color);
+}
+
+.derm-card h3 {
+    font-size: 1.8em;
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.derm-card .derm-specialty {
+    font-size: 1.1em;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.derm-card .derm-bio {
+    font-size: 0.95em;
+    color: #666;
+    margin-bottom: 20px;
+    min-height: 4.5em; /* Consistent height */
+    overflow: hidden;
+}
+
+.derm-social a {
+    font-size: 1.5em;
+    color: var(--secondary-color);
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.derm-social a:hover {
+    color: var(--primary-color);
+}
+
+/* Profile Section */
+.profile-section {
+    background-color: var(--bg-light);
+}
+
+.profile-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    border-bottom: 2px solid var(--border-color);
+    gap: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 5px;
+}
+
+.profile-tabs .tab-button {
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #777;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.profile-tabs .tab-button.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    font-weight: 600;
+}
+
+.profile-tabs .tab-button:hover {
+    color: var(--primary-color);
+}
+
+.tab-content {
+    background-color: var(--bg-white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+    animation: fadeIn 0.5s ease-out forwards;
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+
+.tab-content h3 {
+    text-align: left;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.analysis-list, .user-reviews-list {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.analysis-card, .user-review-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+}
+.analysis-card .scan-thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    flex-shrink: 0;
+}
+.analysis-details {
+    flex-grow: 1;
+}
+.analysis-details h4 {
+    font-size: 1.3em;
+    margin-bottom: 5px;
+    color: var(--secondary-color);
+}
+.analysis-details p {
+    font-size: 0.95em;
+    color: #666;
+    margin-bottom: 10px;
+}
+.analysis-details .btn {
+    margin-right: 10px;
+}
+
+.user-review-card h4 {
+    font-size: 1.3em;
+    margin-bottom: 5px;
+    color: var(--secondary-color);
+}
+.user-review-card .review-meta {
+    font-size: 0.9em;
+    color: #888;
+    margin-bottom: 10px;
+}
+.user-review-card .product-rating {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+.user-review-card .review-text {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.favorite-products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+.favorite-products-grid .product-card {
+    padding: 15px;
+}
+.favorite-products-grid .product-card h3 {
+    font-size: 1.2em;
+}
+.favorite-products-grid .product-card .price {
+    font-size: 1.1em;
+}
+.favorite-products-grid .product-card .btn-remove-favorite {
+    background-color: var(--danger-color);
+    color: white;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    width: 100%;
+}
+.favorite-products-grid .product-card .btn-remove-favorite:hover {
+    background-color: #c0392b;
+}
+
+.no-favorites-message, .no-reviews-message {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+    padding: 30px;
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+}
+
+.account-settings-form .form-group {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.account-settings-form .btn-primary {
+    display: block;
+    margin: 30px auto 0;
+    width: fit-content;
+}
+
+/* Toggle Switch (for notifications) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.small-text {
+    font-size: 0.85em;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* Gallery Section */
+.gallery-section {
+    background-color: var(--bg-white);
+}
+.gallery-filters {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.gallery-filters label {
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-right: 10px;
+}
+.gallery-filters select {
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 1em;
+    color: var(--text-dark);
+}
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+.gallery-item {
+    background-color: var(--bg-light);
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--border-color);
+}
+.gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+.gallery-item img:first-child {
+    border-bottom: 1px solid var(--border-color);
+}
+.gallery-caption {
+    padding: 0 20px;
+}
+.gallery-caption h4 {
+    font-size: 1.3em;
+    color: var(--secondary-color);
+    margin-bottom: 5px;
+}
+.gallery-caption p {
+    font-size: 0.95em;
+    color: #666;
+}
+
+/* Ingredient Checker Section */
+.ingredient-checker-section {
+    background-color: var(--bg-light);
+}
+
+.ingredient-checker-input {
+    max-width: 800px;
+    margin: 0 auto 40px;
+    background-color: var(--bg-white);
+    border-radius: 10px;
+    box-shadow: var(--shadow-light);
+    padding: 30px;
+    text-align: center;
+}
+
+#ingredient-list-input {
+    width: 100%;
+    margin-bottom: 20px;
+    min-height: 200px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95em;
+}
+
+#analyze-ingredients-btn {
+    padding: 12px 30px;
+    font-size: 1.1em;
+}
+
+.ingredient-results {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--bg-white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid var(--primary-color);
+    text-align: left;
+}
+
+.ingredient-results h3 {
+    text-align: left;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+#ingredient-breakdown {
+    background-color: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#ingredient-breakdown p {
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    color: #555;
+}
+#ingredient-breakdown strong {
+    color: var(--secondary-color);
+}
+#ingredient-breakdown .note {
+    font-size: 0.85em;
+    color: #999;
+    font-style: italic;
+    margin-left: 10px;
+}
+
+.concern-suitability h4 {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+.concern-suitability p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+}
+.concern-suitability .success-icon {
+    color: var(--success-color);
+    font-size: 1.3em;
+}
+.concern-suitability .warning-icon {
+    color: var(--warning-color);
+    font-size: 1.3em;
+}
+.concern-suitability .danger-icon {
+    color: var(--danger-color);
+    font-size: 1.3em;
+}
+
+
+/* Footer */
+footer {
+    background-color: var(--secondary-color);
+    color: var(--text-light);
+    padding: 50px 0 20px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.footer-col h4 {
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul a {
+    color: var(--text-light);
+    font-size: 0.95em;
+}
+
+.footer-col ul a:hover {
+    color: var(--primary-color);
+}
+
+.social-icons a {
+    color: var(--text-light);
+    font-size: 1.5em;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: var(--primary-color);
+}
+
+.newsletter-form {
+    display: flex;
+    margin-top: 15px;
+}
+
+.newsletter-form input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    font-size: 0.9em;
+}
+
+.newsletter-form button {
+    border-radius: 0 5px 5px 0;
+    padding: 10px 15px;
+}
+
+.footer-bottom {
+    text-align: center;
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .main-nav ul {
+        gap: 15px;
+    }
+    .hero-content h2 {
+        font-size: 2.8em;
+    }
+    .hero-content p {
+        font-size: 1.2em;
+    }
+    h2 {
+        font-size: 2.2em;
+    }
+    .section-description {
+        font-size: 1em;
+    }
+    .product-filters {
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .filter-group {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-header .container {
+        flex-wrap: nowrap;
+    }
+    .main-nav {
+        display: none; /* Hide desktop nav */
+    }
+    .menu-toggle {
+        display: block; /* Show mobile menu toggle */
+    }
+    .header-actions {
+        gap: 15px;
+    }
+    .search-box input {
+        width: 150px;
+    }
+    .hero-content h2 {
+        font-size: 2.2em;
+    }
+    .hero-content p {
+        font-size: 1em;
+    }
+    .hero-buttons .btn {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+    h2 {
+        font-size: 1.8em;
+    }
+    main section {
+        padding: 60px 0;
+    }
+    .product-grid, .blog-grid, .dermatologist-grid, .analyzer-steps {
+        grid-template-columns: 1fr;
+    }
+    .product-card {
+        padding: 15px;
+    }
+    .analyzer-interface {
+        padding: 20px;
+    }
+    .analyzer-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .analyzer-controls .btn {
+        width: 100%;
+    }
+    .modal-content {
+        padding: 20px;
+    }
+    .modal h3 {
+        font-size: 1.5em;
+    }
+    .quiz-question h4 {
+        font-size: 1.2em;
+    }
+    .quiz-question .options label {
+        font-size: 1em;
+        padding: 12px;
+    }
+    .quiz-controls .btn {
+        flex-grow: 1;
+        text-align: center;
+    }
+    .footer-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        text-align: center;
+    }
+    .footer-col {
+        margin-bottom: 20px;
+    }
+    .footer-col h4 {
+        text-align: center;
+    }
+    .footer-col ul {
+        text-align: center;
+    }
+    .social-icons {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .newsletter-form {
+        flex-direction: column;
+    }
+    .newsletter-form input {
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    .newsletter-form button {
+        border-radius: 5px;
+    }
+
+    /* Profile Specific */
+    .profile-tabs {
+        justify-content: flex-start; /* Align tabs to left */
+    }
+    .analysis-card, .user-review-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    .analysis-details, .user-review-card {
+        text-align: center;
+    }
+    .analysis-details .btn {
+        margin-bottom: 10px;
+    }
+    .analysis-card .scan-thumbnail {
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h2 {
+        font-size: 1.8em;
+    }
+    .hero-content p {
+        font-size: 0.9em;
+    }
+    .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .hero-buttons .btn {
+        width: 100%;
+    }
+    .search-box {
+        display: none; /* Hide search box on very small screens */
+    }
+    .logo h1 {
+        font-size: 1.5em;
+    }
+    .cart-btn {
+        font-size: 1.2em;
+    }
+    .close-mobile-menu {
+        font-size: 2.5em;
+    }
+    .mobile-nav a {
+        font-size: 1.5em;
+    }
+}</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/40" alt="DermGlam Logo">
+                <h1>DermGlam</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+                    <li><a href="#products" class="nav-link" data-section="products">Shop Products</a></li>
+                    <li><a href="#analyzer" class="nav-link" data-section="analyzer">Skin Analyzer</a></li>
+                    <li><a href="#blog" class="nav-link" data-section="blog">Derm Insights</a></li>
+                    <li><a href="#dermatologists" class="nav-link" data-section="dermatologists">Our Experts</a></li>
+                    <li><a href="#profile" class="nav-link" data-section="profile">My Profile</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="search-box">
+                    <input type="text" placeholder="Search products...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <button class="cart-btn"><i class="fas fa-shopping-cart"></i> <span class="cart-count">0</span></button>
+                <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero-section active-section">
+            <div class="container">
+                <div class="hero-content">
+                    <h2>Your Skin, Dermatologist Approved.</h2>
+                    <p>Discover makeup that loves your skin, curated and recommended by leading dermatologists.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary scroll-to-analyzer">Analyze My Skin</button>
+                        <button class="btn btn-secondary scroll-to-products">Shop Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="products" class="products-section hidden-section">
+            <div class="container">
+                <h2>Dermatologist-Approved Makeup</h2>
+                <div class="product-filters">
+                    <div class="filter-group">
+                        <label for="skin-type-filter"><i class="fas fa-magic"></i> Skin Type:</label>
+                        <select id="skin-type-filter">
+                            <option value="all">All</option>
+                            <option value="oily">Oily</option>
+                            <option value="dry">Dry</option>
+                            <option value="sensitive">Sensitive</option>
+                            <option value="acne-prone">Acne-Prone</option>
+                            <option value="combination">Combination</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="skin-tone-filter"><i class="fas fa-paint-brush"></i> Skin Tone:</label>
+                        <select id="skin-tone-filter">
+                            <option value="all">All</option>
+                            <option value="fair">Fair</option>
+                            <option value="light">Light</option>
+                            <option value="medium">Medium</option>
+                            <option value="tan">Tan</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="concern-filter"><i class="fas fa-leaf"></i> Concerns:</label>
+                        <select id="concern-filter">
+                            <option value="all">All</option>
+                            <option value="acne">Acne</option>
+                            <option value="rosacea">Rosacea</option>
+                            <option value="eczema">Eczema</option>
+                            <option value="anti-aging">Anti-aging</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="certification-filter"><i class="fas fa-certificate"></i> Certifications:</label>
+                        <select id="certification-filter">
+                            <option value="all">All</option>
+                            <option value="cruelty-free">Cruelty-Free</option>
+                            <option value="vegan">Vegan</option>
+                            <option value="hypoallergenic">Hypoallergenic</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="product-grid" id="product-grid">
+                    <div class="product-card" data-skin-type="oily,acne-prone" data-skin-tone="all" data-concerns="acne" data-certifications="cruelty-free">
+                        <img src="https://via.placeholder.com/200x200" alt="Oil-Free Matte Foundation">
+                        <h3>Oil-Free Matte Foundation</h3>
+                        <p class="price">$32.00</p>
+                        <div class="tags">
+                            <span class="tag skin-type">Oily, Acne-Prone</span>
+                            <span class="tag ingredient">Non-Comedogenic</span>
+                        </div>
+                        <div class="expert-comment">
+                            <i class="fas fa-user-md"></i>
+                            <p>"Excellent for controlling shine without clogging pores." - Dr. Anya Sharma</p>
+                        </div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> (4.5)
+                        </div>
+                        <button class="btn btn-add-to-cart" data-product-id="prod001">Add to Cart</button>
+                    </div>
+
+                    <div class="product-card" data-skin-type="dry,sensitive" data-skin-tone="light,medium" data-concerns="rosacea" data-certifications="vegan,hypoallergenic">
+                        <img src="https://via.placeholder.com/200x200" alt="Hydrating Tinted Moisturizer">
+                        <h3>Hydrating Tinted Moisturizer SPF 30</h3>
+                        <p class="price">$28.00</p>
+                        <div class="tags">
+                            <span class="tag skin-type">Dry, Sensitive</span>
+                            <span class="tag ingredient">Fragrance-Free</span>
+                        </div>
+                        <div class="expert-comment">
+                            <i class="fas fa-user-md"></i>
+                            <p>"Provides subtle coverage & much-needed hydration." - Dr. David Lee</p>
+                        </div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> (4.0)
+                        </div>
+                        <button class="btn btn-add-to-cart" data-product-id="prod002">Add to Cart</button>
+                    </div>
+
+                    <div class="product-card" data-skin-type="all" data-skin-tone="all" data-concerns="all" data-certifications="cruelty-free,vegan">
+                        <img src="https://via.placeholder.com/200x200" alt="Gentle Mineral Concealer">
+                        <h3>Gentle Mineral Concealer</h3>
+                        <p class="price">$20.00</p>
+                        <div class="tags">
+                            <span class="tag skin-type">All Skin Types</span>
+                            <span class="tag ingredient">Hypoallergenic</span>
+                        </div>
+                        <div class="expert-comment">
+                            <i class="fas fa-user-md"></i>
+                            <p>"Covers imperfections without irritation." - Dr. Anya Sharma</p>
+                        </div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (5.0)
+                        </div>
+                        <button class="btn btn-add-to-cart" data-product-id="prod003">Add to Cart</button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="analyzer" class="analyzer-section hidden-section">
+            <div class="container">
+                <h2>AI Skin Analyzer</h2>
+                <p class="section-description">Use your camera for an instant, personalized skin analysis and product recommendations.</p>
+
+                <div class="analyzer-steps">
+                    <div class="step-card">
+                        <i class="fas fa-camera"></i>
+                        <h3>1. Capture Your Skin</h3>
+                        <p>Allow camera access and take a clear, well-lit photo of your face.</p>
+                    </div>
+                    <div class="step-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>2. AI Analyzes</h3>
+                        <p>Our intelligent system detects your skin type and identifies potential concerns.</p>
+                    </div>
+                    <div class="step-card">
+                        <i class="fas fa-palette"></i>
+                        <h3>3. Get Recommendations</h3>
+                        <p>Receive tailored makeup and skincare product suggestions.</p>
+                    </div>
+                </div>
+
+                <div class="analyzer-interface">
+                    <div class="video-container">
+                        <video id="webcam-feed" autoplay playsinline></video>
+                        <canvas id="analyzer-canvas" style="display:none;"></canvas>
+                    </div>
+                    <div class="analyzer-controls">
+                        <button id="start-scan-btn" class="btn btn-primary"><i class="fas fa-camera"></i> Start Scan</button>
+                        <button id="capture-btn" class="btn btn-secondary" style="display:none;"><i class="fas fa-image"></i> Capture Photo</button>
+                        <button id="retake-btn" class="btn btn-danger" style="display:none;"><i class="fas fa-redo"></i> Retake</button>
+                    </div>
+                    <div class="analyzer-results" style="display:none;">
+                        <h3>Your Skin Analysis:</h3>
+                        <p><strong>Skin Type:</strong> <span id="result-skin-type"></span></p>
+                        <p><strong>Concerns:</strong> <span id="result-concerns"></span></p>
+                        <p><strong>Recommended Products:</strong></p>
+                        <ul id="recommended-products-list">
+                            </ul>
+                        <button class="btn btn-primary save-analysis-btn"><i class="fas fa-save"></i> Save Analysis to Profile</button>
+                    </div>
+                    <p class="privacy-note"><i class="fas fa-lock"></i> Your camera feed is processed locally and not stored without explicit consent. See our <a href="#privacy">Privacy Policy</a>.</p>
+                </div>
+
+                <div class="quiz-fallback">
+                    <h3>No Camera? No Problem!</h3>
+                    <p>Take our quick skin type quiz instead to get personalized recommendations.</p>
+                    <button class="btn btn-outline quiz-start-btn"><i class="fas fa-question-circle"></i> Start Skin Quiz</button>
+                </div>
+            </div>
+        </section>
+
+        <div id="skin-quiz-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h3>Discover Your Skin Type</h3>
+                <form id="skin-quiz-form">
+                    <div class="quiz-question active-question" data-question="1">
+                        <h4>Q1: How does your skin feel an hour after washing?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q1" value="tight-dry"> Tight and dry</label>
+                            <label><input type="radio" name="q1" value="comfortable"> Comfortable, no issues</label>
+                            <label><input type="radio" name="q1" value="oily-tzone"> Oily T-zone, dry cheeks</label>
+                            <label><input type="radio" name="q1" value="shiny-all-over"> Shiny all over</label>
+                        </div>
+                    </div>
+                    <div class="quiz-question" data-question="2">
+                        <h4>Q2: How often do you experience breakouts?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q2" value="rarely"> Rarely, if ever</label>
+                            <label><input type="radio" name="q2" value="monthly"> Occasionally (around period)</label>
+                            <label><input type="radio" name="q2" value="frequently"> Frequently, cystic acne</label>
+                            <label><input type="radio" name="q2" value="tzone-only"> Only on my T-zone</label>
+                        </div>
+                    </div>
+                    <div class="quiz-question" data-question="3">
+                        <h4>Q3: How does your skin react to new products?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q3" value="no-issue"> No issues</label>
+                            <label><input type="radio" name="q3" value="redness-itching"> Redness, itching, stinging</label>
+                            <label><input type="radio" name="q3" value="breakouts"> Breakouts</label>
+                        </div>
+                    </div>
+                    <div class="quiz-controls">
+                        <button type="button" class="btn btn-secondary prev-question" style="display:none;"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button type="button" class="btn btn-primary next-question"><i class="fas fa-arrow-right"></i> Next</button>
+                        <button type="submit" class="btn btn-success submit-quiz" style="display:none;"><i class="fas fa-check"></i> Get Recommendations</button>
+                    </div>
+                </form>
+                <div id="quiz-results" style="display:none;">
+                    <h3>Your Quiz Results:</h3>
+                    <p>Based on your answers, your skin type is: <strong id="quiz-result-type"></strong></p>
+                    <p>Here are some recommended products for you:</p>
+                    <ul id="quiz-recommended-products-list"></ul>
+                    <button class="btn btn-primary view-products-btn"><i class="fas fa-box"></i> View Recommended Products</button>
+                </div>
+            </div>
+        </div>
+
+        <section id="blog" class="blog-section hidden-section">
+            <div class="container">
+                <h2>Dermatologist Insights</h2>
+                <p class="section-description">Expert-backed articles on skincare, makeup routines, and ingredient education.</p>
+                <div class="blog-grid">
+                    <article class="blog-post">
+                        <img src="https://via.placeholder.com/300x180" alt="Makeup for Rosacea">
+                        <h3>Makeup Tips for Rosacea-Prone Skin</h3>
+                        <p class="blog-meta">By Dr. Anya Sharma | May 15, 2025</p>
+                        <p>Learn how to choose the right foundations and concealers to calm redness and avoid irritation...</p>
+                        <a href="#" class="btn btn-outline">Read More</a>
+                    </article>
+                    <article class="blog-post">
+                        <img src="https://via.placeholder.com/300x180" alt="Non-Comedogenic Makeup">
+                        <h3>Understanding Non-Comedogenic: Your Guide to Acne-Free Makeup</h3>
+                        <p class="blog-meta">By Dr. David Lee | April 28, 2025</p>
+                        <p>Decoding ingredient lists can be tricky. We break down what "non-comedogenic" truly means...</p>
+                        <a href="#" class="btn btn-outline">Read More</a>
+                    </article>
+                    <article class="blog-post">
+                        <img src="https://via.placeholder.com/300x180" alt="Anti-aging makeup">
+                        <h3>Anti-Aging Makeup: Products That Also Treat Your Skin</h3>
+                        <p class="blog-meta">By Dr. Anya Sharma | March 10, 2025</p>
+                        <p>Discover foundations and concealers infused with beneficial ingredients like hyaluronic acid and antioxidants...</p>
+                        <a href="#" class="btn btn-outline">Read More</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="dermatologists" class="dermatologists-section hidden-section">
+            <div class="container">
+                <h2>Meet Our Expert Panel</h2>
+                <p class="section-description">The certified dermatologists who review and approve every product on DermGlam.</p>
+                <div class="dermatologist-grid">
+                    <div class="derm-card">
+                        <img src="https://via.placeholder.com/150" alt="Dr. Anya Sharma" class="derm-photo">
+                        <h3>Dr. Anya Sharma, MD</h3>
+                        <p class="derm-specialty">Board-Certified Dermatologist</p>
+                        <p class="derm-bio">Specializing in cosmetic dermatology and sensitive skin conditions. Dr. Sharma ensures products meet the highest standards for efficacy and safety.</p>
+                        <div class="derm-social">
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="derm-card">
+                        <img src="https://via.placeholder.com/150" alt="Dr. David Lee" class="derm-photo">
+                        <h3>Dr. David Lee, MD</h3>
+                        <p class="derm-specialty">Board-Certified Dermatologist</p>
+                        <p class="derm-bio">Expert in acne treatments and ingredient science. Dr. Lee provides crucial insights into product formulations for problematic skin.</p>
+                        <div class="derm-social">
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="profile" class="profile-section hidden-section">
+            <div class="container">
+                <h2>My DermGlam Profile</h2>
+                <p class="section-description">Manage your saved skin analyses, favorite products, and preferences.</p>
+
+                <div class="profile-tabs">
+                    <button class="tab-button active" data-tab="saved-scans">Saved Analyses</button>
+                    <button class="tab-button" data-tab="my-favorites">My Favorites</button>
+                    <button class="tab-button" data-tab="my-reviews">My Reviews</button>
+                    <button class="tab-button" data-tab="settings">Account Settings</button>
+                </div>
+
+                <div id="saved-scans" class="tab-content active">
+                    <h3>Your Saved Skin Analyses</h3>
+                    <div class="analysis-list">
+                        <div class="analysis-card">
+                            <img src="https://via.placeholder.com/100x100" alt="Scan 1" class="scan-thumbnail">
+                            <div class="analysis-details">
+                                <h4>Analysis from May 20, 2025</h4>
+                                <p><strong>Skin Type:</strong> Combination</p>
+                                <p><strong>Concerns:</strong> Mild Acne, Occasional Redness</p>
+                                <button class="btn btn-sm btn-outline view-analysis-products"><i class="fas fa-box"></i> View Products</button>
+                                <button class="btn btn-sm btn-danger delete-analysis"><i class="fas fa-trash-alt"></i> Delete</button>
+                            </div>
+                        </div>
+                         <div class="analysis-card">
+                            <img src="https://via.placeholder.com/100x100" alt="Scan 2" class="scan-thumbnail">
+                            <div class="analysis-details">
+                                <h4>Analysis from April 10, 2025</h4>
+                                <p><strong>Skin Type:</strong> Oily</p>
+                                <p><strong>Concerns:</strong> Enlarged Pores, Oily T-zone</p>
+                                <button class="btn btn-sm btn-outline view-analysis-products"><i class="fas fa-box"></i> View Products</button>
+                                <button class="btn btn-sm btn-danger delete-analysis"><i class="fas fa-trash-alt"></i> Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary reminder-btn"><i class="fas fa-bell"></i> Set Re-Analyze Reminder</button>
+                </div>
+
+                <div id="my-favorites" class="tab-content">
+                    <h3>Your Favorite Products</h3>
+                    <div class="favorite-products-grid product-grid">
+                        <div class="product-card">
+                            <img src="https://via.placeholder.com/200x200" alt="Oil-Free Matte Foundation">
+                            <h3>Oil-Free Matte Foundation</h3>
+                            <p class="price">$32.00</p>
+                            <div class="tags">
+                                <span class="tag skin-type">Oily, Acne-Prone</span>
+                                <span class="tag ingredient">Non-Comedogenic</span>
+                            </div>
+                            <button class="btn btn-remove-favorite"><i class="fas fa-heart-broken"></i> Remove</button>
+                        </div>
+                    </div>
+                    <p class="no-favorites-message" style="display: none;">You haven't saved any favorite products yet.</p>
+                </div>
+
+                <div id="my-reviews" class="tab-content">
+                    <h3>Your Product Reviews</h3>
+                    <div class="user-reviews-list">
+                        <div class="user-review-card">
+                            <h4>Review for Hydrating Tinted Moisturizer SPF 30</h4>
+                            <p class="review-meta">Skin Type: Dry | Skin Tone: Light | Purchased: May 1, 2025</p>
+                            <div class="product-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                            </div>
+                            <p class="review-text">"This tinted moisturizer is perfect for my dry, sensitive skin. It provides just enough coverage and feels amazing!"</p>
+                            <button class="btn btn-sm btn-warning edit-review"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-sm btn-danger delete-review"><i class="fas fa-trash-alt"></i> Delete</button>
+                        </div>
+                    </div>
+                    <p class="no-reviews-message" style="display: none;">You haven't submitted any reviews yet.</p>
+                </div>
+
+                <div id="settings" class="tab-content">
+                    <h3>Account Settings</h3>
+                    <form class="account-settings-form">
+                        <div class="form-group">
+                            <label for="profile-name">Name:</label>
+                            <input type="text" id="profile-name" value="Jane Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-email">Email:</label>
+                            <input type="email" id="profile-email" value="jane.doe@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-skin-type">Preferred Skin Type:</label>
+                            <select id="profile-skin-type">
+                                <option value="oily">Oily</option>
+                                <option value="dry" selected>Dry</option>
+                                <option value="sensitive">Sensitive</option>
+                                <option value="acne-prone">Acne-Prone</option>
+                                <option value="combination">Combination</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-notifications">Newsletter & Notifications:</label>
+                            <label class="switch">
+                                <input type="checkbox" id="profile-notifications" checked>
+                                <span class="slider round"></span>
+                            </label>
+                            <p class="small-text">Receive expert tips, new product launches, and exclusive discounts.</p>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Settings</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <div id="review-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h3>Submit Your Review</h3>
+                <form id="review-form">
+                    <input type="hidden" id="review-product-id">
+                    <div class="form-group">
+                        <label for="review-product-name">Product:</label>
+                        <input type="text" id="review-product-name" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-skin-type">Your Skin Type:</label>
+                        <select id="review-skin-type">
+                            <option value="oily">Oily</option>
+                            <option value="dry">Dry</option>
+                            <option value="sensitive">Sensitive</option>
+                            <option value="acne-prone">Acne-Prone</option>
+                            <option value="combination">Combination</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-skin-tone">Your Skin Tone:</label>
+                        <select id="review-skin-tone">
+                            <option value="fair">Fair</option>
+                            <option value="light">Light</option>
+                            <option value="medium">Medium</option>
+                            <option value="tan">Tan</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Rating:</label>
+                        <div class="stars" id="review-stars">
+                            <i class="far fa-star" data-value="1"></i>
+                            <i class="far fa-star" data-value="2"></i>
+                            <i class="far fa-star" data-value="3"></i>
+                            <i class="far fa-star" data-value="4"></i>
+                            <i class="far fa-star" data-value="5"></i>
+                        </div>
+                        <input type="hidden" id="review-rating" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="review-text">Your Review:</label>
+                        <textarea id="review-text" rows="5" placeholder="Share your experience with this product..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Review</button>
+                </form>
+            </div>
+        </div>
+
+        <section id="gallery" class="gallery-section hidden-section">
+            <div class="container">
+                <h2>Real Results: Before & After Gallery</h2>
+                <p class="section-description">See the transformative power of dermatologist-recommended makeup.</p>
+                <div class="gallery-filters">
+                    <label for="gallery-skin-condition">Filter by Skin Condition:</label>
+                    <select id="gallery-skin-condition">
+                        <option value="all">All</option>
+                        <option value="acne">Acne</option>
+                        <option value="rosacea">Rosacea</option>
+                        <option value="hyperpigmentation">Hyperpigmentation</option>
+                    </select>
+                </div>
+                <div class="gallery-grid">
+                    <div class="gallery-item" data-condition="acne">
+                        <img src="https://via.placeholder.com/300x200?text=Before" alt="Before Acne">
+                        <img src="https://via.placeholder.com/300x200?text=After" alt="After Acne">
+                        <div class="gallery-caption">
+                            <h4>Acne Coverage Example</h4>
+                            <p>Using Oil-Free Matte Foundation</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-condition="rosacea">
+                        <img src="https://via.placeholder.com/300x200?text=Before" alt="Before Rosacea">
+                        <img src="https://via.placeholder.com/300x200?text=After" alt="After Rosacea">
+                        <div class="gallery-caption">
+                            <h4>Redness Reduction Example</h4>
+                            <p>Using Hydrating Tinted Moisturizer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+         <section id="ingredient-checker" class="ingredient-checker-section hidden-section">
+            <div class="container">
+                <h2>Ingredient Checker Tool</h2>
+                <p class="section-description">Paste an ingredient list to see its potential impact on your skin.</p>
+                <div class="ingredient-checker-input">
+                    <textarea id="ingredient-list-input" rows="10" placeholder="Paste product ingredient list here (e.g., Aqua, Glycerin, Salicylic Acid, Parfum...)"></textarea>
+                    <button class="btn btn-primary" id="analyze-ingredients-btn"><i class="fas fa-flask"></i> Analyze Ingredients</button>
+                </div>
+                <div class="ingredient-results" style="display:none;">
+                    <h3>Analysis Results:</h3>
+                    <div id="ingredient-breakdown">
+                        </div>
+                    <div class="concern-suitability">
+                        <h4>Suitability for Specific Concerns:</h4>
+                        <p><i class="fas fa-check-circle success-icon"></i> <span class="concern-text">Suitable for Acne-Prone Skin</span> (No known comedogenic ingredients found)</p>
+                        <p><i class="fas fa-exclamation-triangle warning-icon"></i> <span class="concern-text">Potentially Irritating for Sensitive Skin</span> (Contains Parfum, Alcohol Denat)</p>
+                    </div>
+                </div>
+                <p class="privacy-note"><i class="fas fa-info-circle"></i> This tool provides general guidance. Always patch test new products. Data is processed locally and not stored.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>DermGlam</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="#products">Foundations</a></li>
+                        <li><a href="#products">Concealers</a></li>
+                        <li><a href="#products">Primers</a></li>
+                        <li><a href="#products">Powders</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#returns">Return Policy</a></li>
+                        <li><a href="#cookie">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <p>Subscribe to our Newsletter for exclusive tips & offers!</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address">
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2025 DermGlam. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay">
+        <span class="close-mobile-menu">&times;</span>
+        <nav class="mobile-nav">
+            <ul>
+                <li><a href="#home" class="nav-link" data-section="home">Home</a></li>
+                <li><a href="#products" class="nav-link" data-section="products">Shop Products</a></li>
+                <li><a href="#analyzer" class="nav-link" data-section="analyzer">Skin Analyzer</a></li>
+                <li><a href="#blog" class="nav-link" data-section="blog">Derm Insights</a></li>
+                <li><a href="#dermatologists" class="nav-link" data-section="dermatologists">Our Experts</a></li>
+                <li><a href="#profile" class="nav-link" data-section="profile">My Profile</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>document.addEventListener('DOMContentLoaded', () => {
+    // --- Global Elements & Utility Functions ---
+    const navLinks = document.querySelectorAll('.main-nav .nav-link, .mobile-nav .nav-link');
+    const sections = document.querySelectorAll('main section');
+    const mobileMenuToggle = document.querySelector('.menu-toggle');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    const closeMobileMenu = document.querySelector('.close-mobile-menu');
+    const modals = document.querySelectorAll('.modal');
+    const closeButtons = document.querySelectorAll('.modal .close-button');
+
+    // Function to show a specific section
+    function showSection(sectionId) {
+        sections.forEach(section => {
+            section.classList.remove('active-section');
+            section.classList.add('hidden-section'); // Hide with display:none
+        });
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.classList.remove('hidden-section'); // Remove display:none first
+            setTimeout(() => { // Trigger animation after display change
+                targetSection.classList.add('active-section');
+            }, 50);
+        }
+    }
+
+    // Function to set active navigation link
+    function setActiveNavLink(linkToActivate) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        if (linkToActivate) {
+            linkToActivate.classList.add('active');
+        }
+    }
+
+    // Function to open a specific modal
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = 'flex'; // Use flex to center
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+    }
+
+    // Function to close all modals
+    function closeModals() {
+        modals.forEach(modal => {
+            modal.style.display = 'none';
+        });
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+
+    // --- Event Listeners ---
+
+    // Navigation clicks
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const sectionId = link.dataset.section;
+            showSection(sectionId);
+            setActiveNavLink(link);
+            if (mobileMenuOverlay.classList.contains('open')) {
+                mobileMenuOverlay.classList.remove('open');
+            }
+        });
+    });
+
+    // Initial section load (Home)
+    showSection('home');
+    setActiveNavLink(document.querySelector('.nav-link[data-section="home"]'));
+
+    // Mobile menu toggle
+    mobileMenuToggle.addEventListener('click', () => {
+        mobileMenuOverlay.classList.add('open');
+    });
+
+    closeMobileMenu.addEventListener('click', () => {
+        mobileMenuOverlay.classList.remove('open');
+    });
+
+    // Close modals using close button
+    closeButtons.forEach(button => {
+        button.addEventListener('click', closeModals);
+    });
+
+    // Close modals when clicking outside content
+    window.addEventListener('click', (event) => {
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                closeModals();
+            }
+        });
+    });
+
+    // Scroll to section buttons on Hero
+    document.querySelector('.scroll-to-analyzer').addEventListener('click', () => {
+        showSection('analyzer');
+        setActiveNavLink(document.querySelector('.nav-link[data-section="analyzer"]'));
+    });
+
+    document.querySelector('.scroll-to-products').addEventListener('click', () => {
+        showSection('products');
+        setActiveNavLink(document.querySelector('.nav-link[data-section="products"]'));
+    });
+
+    // --- Product Filtering ---
+    const productGrid = document.getElementById('product-grid');
+    const productCards = productGrid ? productGrid.querySelectorAll('.product-card') : [];
+    const skinTypeFilter = document.getElementById('skin-type-filter');
+    const skinToneFilter = document.getElementById('skin-tone-filter');
+    const concernFilter = document.getElementById('concern-filter');
+    const certificationFilter = document.getElementById('certification-filter');
+
+    function applyFilters() {
+        const selectedSkinType = skinTypeFilter.value;
+        const selectedSkinTone = skinToneFilter.value;
+        const selectedConcern = concernFilter.value;
+        const selectedCertification = certificationFilter.value;
+
+        productCards.forEach(card => {
+            const cardSkinTypes = card.dataset.skinType.split(',');
+            const cardSkinTones = card.dataset.skinTone.split(',');
+            const cardConcerns = card.dataset.concerns.split(',');
+            const cardCertifications = card.dataset.certifications.split(',');
+
+            const matchesSkinType = selectedSkinType === 'all' || cardSkinTypes.includes(selectedSkinType);
+            const matchesSkinTone = selectedSkinTone === 'all' || cardSkinTones.includes(selectedSkinTone);
+            const matchesConcern = selectedConcern === 'all' || cardConcerns.includes(selectedConcern);
+            const matchesCertification = selectedCertification === 'all' || cardCertifications.includes(selectedCertification);
+
+            if (matchesSkinType && matchesSkinTone && matchesConcern && matchesCertification) {
+                card.style.display = 'block'; // Show the card
+            } else {
+                card.style.display = 'none'; // Hide the card
+            }
+        });
+    }
+
+    if (skinTypeFilter) skinTypeFilter.addEventListener('change', applyFilters);
+    if (skinToneFilter) skinToneFilter.addEventListener('change', applyFilters);
+    if (concernFilter) concernFilter.addEventListener('change', applyFilters);
+    if (certificationFilter) certificationFilter.addEventListener('change', applyFilters);
+
+    // Initial filter application
+    if (productCards.length > 0) {
+        applyFilters();
+    }
+
+
+    // --- AI Skin Analyzer (Conceptual) ---
+    const webcamFeed = document.getElementById('webcam-feed');
+    const analyzerCanvas = document.getElementById('analyzer-canvas');
+    const startScanBtn = document.getElementById('start-scan-btn');
+    const captureBtn = document.getElementById('capture-btn');
+    const retakeBtn = document.getElementById('retake-btn');
+    const analyzerResults = document.querySelector('.analyzer-results');
+    const resultSkinType = document.getElementById('result-skin-type');
+    const resultConcerns = document.getElementById('result-concerns');
+    const recommendedProductsList = document.getElementById('recommended-products-list');
+    const saveAnalysisBtn = document.querySelector('.save-analysis-btn');
+
+    let stream; // To hold the webcam stream
+
+    // Dummy recommendations based on analysis (replace with real logic)
+    const dummyRecommendations = {
+        'oily': ['Oil-Free Matte Foundation', 'Balancing Primer', 'Blemish Control Concealer'],
+        'dry': ['Hydrating Tinted Moisturizer SPF 30', 'Creamy Concealer', 'Dewy Finish Setting Spray'],
+        'sensitive': ['Gentle Mineral Concealer', 'Hypoallergenic Mascara', 'Fragrance-Free Lip Balm'],
+        'acne-prone': ['Oil-Free Matte Foundation', 'Blemish Control Concealer', 'Non-Comedogenic Powder'],
+        'combination': ['T-Zone Mattifying Primer', 'Hydrating Tinted Moisturizer SPF 30', 'Oil-Free Matte Foundation'],
+        'rosacea': ['Hydrating Tinted Moisturizer SPF 30', 'Green Color Corrector', 'Calming Face Powder'],
+        'eczema': ['Hydrating Tinted Moisturizer SPF 30', 'Sensitive Skin Concealer']
+    };
+
+    startScanBtn.addEventListener('click', async () => {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+            webcamFeed.srcObject = stream;
+            webcamFeed.style.display = 'block';
+            analyzerCanvas.style.display = 'none'; // Ensure canvas is hidden initially
+            startScanBtn.style.display = 'none';
+            captureBtn.style.display = 'inline-flex';
+            retakeBtn.style.display = 'none';
+            analyzerResults.style.display = 'none';
+            alert('Camera access granted. Position your face in the center and click "Capture Photo".');
+        } catch (err) {
+            console.error("Error accessing webcam: ", err);
+            alert("Could not access your webcam. Please ensure you have a camera and grant permission.");
+        }
+    });
+
+    captureBtn.addEventListener('click', () => {
+        if (!webcamFeed.srcObject) {
+            alert('Please start the scan first.');
+            return;
+        }
+
+        const context = analyzerCanvas.getContext('2d');
+        analyzerCanvas.width = webcamFeed.videoWidth;
+        analyzerCanvas.height = webcamFeed.videoHeight;
+        context.clearRect(0, 0, analyzerCanvas.width, analyzerCanvas.height); // Clear previous content
+        context.drawImage(webcamFeed, 0, 0, analyzerCanvas.width, analyzerCanvas.height);
+
+        // Stop the webcam stream
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        webcamFeed.srcObject = null;
+        webcamFeed.style.display = 'none';
+        analyzerCanvas.style.display = 'block';
+
+        // --- Mock AI Analysis ---
+        const skinTypes = ['oily', 'dry', 'sensitive', 'acne-prone', 'combination'];
+        const concerns = ['acne', 'rosacea', 'enlarged pores', 'redness'];
+        const detectedSkinType = skinTypes[Math.floor(Math.random() * skinTypes.length)];
+        const detectedConcerns = Array.from({ length: Math.floor(Math.random() * 3) + 1 }, () => concerns[Math.floor(Math.random() * concerns.length)]);
+
+        resultSkinType.textContent = detectedSkinType.charAt(0).toUpperCase() + detectedSkinType.slice(1);
+        resultConcerns.textContent = detectedConcerns.join(', ') || 'None identified';
+
+        recommendedProductsList.innerHTML = '';
+        const recs = dummyRecommendations[detectedSkinType] || dummyRecommendations['all'];
+        recs.forEach(product => {
+            const li = document.createElement('li');
+            li.textContent = product;
+            recommendedProductsList.appendChild(li);
+        });
+        // End Mock AI Analysis
+
+        analyzerResults.style.display = 'block';
+        captureBtn.style.display = 'none';
+        retakeBtn.style.display = 'inline-flex';
+        startScanBtn.style.display = 'none'; // Keep Start Scan hidden
+        alert('Analysis complete! Check your results below.');
+    });
+
+    retakeBtn.addEventListener('click', () => {
+        webcamFeed.style.display = 'block';
+        analyzerCanvas.style.display = 'none';
+        analyzerResults.style.display = 'none';
+        startScanBtn.style.display = 'inline-flex'; // Show Start Scan again
+        captureBtn.style.display = 'none';
+        retakeBtn.style.display = 'none';
+    });
+
+    saveAnalysisBtn.addEventListener('click', () => {
+        alert('Analysis saved to your profile! (Conceptual)');
+        // In a real application: Send the analysis results (image, skin type, concerns, recommendations) to a backend for user profile storage.
+        // Update the 'My Profile' > 'Saved Analyses' tab dynamically.
+    });
+
+
+    // --- Skin Type Quiz ---
+    const quizStartBtn = document.querySelector('.quiz-start-btn');
+    const skinQuizModal = document.getElementById('skin-quiz-modal');
+    const skinQuizForm = document.getElementById('skin-quiz-form');
+    const quizQuestions = skinQuizForm.querySelectorAll('.quiz-question');
+    const prevQuestionBtn = skinQuizForm.querySelector('.prev-question');
+    const nextQuestionBtn = skinQuizForm.querySelector('.next-question');
+    const submitQuizBtn = skinQuizForm.querySelector('.submit-quiz');
+    const quizResultsDiv = document.getElementById('quiz-results');
+    const quizResultType = document.getElementById('quiz-result-type');
+    const quizRecommendedProductsList = document.getElementById('quiz-recommended-products-list');
+    const viewRecommendedProductsBtn = document.querySelector('.view-products-btn');
+
+
+    let currentQuestionIndex = 0;
+
+    function showQuizQuestion(index) {
+        quizQuestions.forEach((q, i) => {
+            q.classList.remove('active-question');
+            if (i === index) {
+                q.classList.add('active-question');
+            }
+        });
+
+        prevQuestionBtn.style.display = (index === 0) ? 'none' : 'inline-flex';
+        nextQuestionBtn.style.display = (index === quizQuestions.length - 1) ? 'none' : 'inline-flex';
+        submitQuizBtn.style.display = (index === quizQuestions.length - 1) ? 'inline-flex' : 'none';
+    }
+
+    quizStartBtn.addEventListener('click', () => {
+        skinQuizForm.reset();
+        quizResultsDiv.style.display = 'none';
+        currentQuestionIndex = 0;
+        showQuizQuestion(currentQuestionIndex);
+        openModal('skin-quiz-modal');
+    });
+
+    nextQuestionBtn.addEventListener('click', () => {
+        const currentQuestion = quizQuestions[currentQuestionIndex];
+        const selectedOption = currentQuestion.querySelector('input[type="radio"]:checked');
+        if (!selectedOption) {
+            alert('Please select an option before proceeding.');
+            return;
+        }
+
+        if (currentQuestionIndex < quizQuestions.length - 1) {
+            currentQuestionIndex++;
+            showQuizQuestion(currentQuestionIndex);
+        }
+    });
+
+    prevQuestionBtn.addEventListener('click', () => {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            showQuizQuestion(currentQuestionIndex);
+        }
+    });
+
+    skinQuizForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const currentQuestion = quizQuestions[currentQuestionIndex];
+        const selectedOption = currentQuestion.querySelector('input[type="radio"]:checked');
+        if (!selectedOption) {
+            alert('Please select an option for the last question.');
+            return;
+        }
+
+        // --- Simple Quiz Logic (Conceptual) ---
+        const answers = {};
+        quizQuestions.forEach((q, i) => {
+            const name = q.querySelector('input[type="radio"]').name;
+            const value = q.querySelector('input[name="' + name + '"]:checked')?.value;
+            answers[name] = value;
+        });
+
+        let deducedSkinType = 'Normal'; // Default
+        let recommendations = dummyRecommendations['all'];
+
+        if (answers.q1 === 'tight-dry') {
+            deducedSkinType = 'Dry';
+            recommendations = dummyRecommendations['dry'];
+        } else if (answers.q1 === 'shiny-all-over') {
+            deducedSkinType = 'Oily';
+            recommendations = dummyRecommendations['oily'];
+        } else if (answers.q1 === 'oily-tzone') {
+            deducedSkinType = 'Combination';
+            recommendations = dummyRecommendations['combination'];
+        }
+
+        if (answers.q2 === 'frequently' || answers.q2 === 'tzone-only') {
+            if (deducedSkinType !== 'Oily' && deducedSkinType !== 'Combination') {
+                 deducedSkinType = 'Acne-Prone'; // Overwrite if breakouts are primary
+            }
+            if (!recommendations.includes('Blemish Control Concealer')) { // Add if not already there
+                recommendations = [...recommendations, 'Blemish Control Concealer'];
+            }
+        }
+
+        if (answers.q3 === 'redness-itching') {
+            deducedSkinType = 'Sensitive'; // Prioritize sensitive if reaction
+            recommendations = dummyRecommendations['sensitive'];
+        }
+
+        quizResultType.textContent = deducedSkinType;
+        quizRecommendedProductsList.innerHTML = '';
+        recommendations.forEach(product => {
+            const li = document.createElement('li');
+            li.textContent = product;
+            quizRecommendedProductsList.appendChild(li);
+        });
+        // End Simple Quiz Logic
+
+        skinQuizForm.style.display = 'none';
+        quizResultsDiv.style.display = 'block';
+    });
+
+    viewRecommendedProductsBtn.addEventListener('click', () => {
+        closeModals();
+        showSection('products');
+        setActiveNavLink(document.querySelector('.nav-link[data-section="products"]'));
+        // Optionally, apply quiz-derived filters automatically
+        skinTypeFilter.value = quizResultType.textContent.toLowerCase().replace(' ', '-');
+        applyFilters();
+    });
+
+
+    // --- User Reviews & Ratings ---
+    const addReviewBtns = document.querySelectorAll('.btn-add-to-cart'); // For demo, let's use cart button for review trigger
+    const reviewModal = document.getElementById('review-modal');
+    const reviewForm = document.getElementById('review-form');
+    const reviewProductId = document.getElementById('review-product-id');
+    const reviewProductName = document.getElementById('review-product-name');
+    const reviewStars = document.getElementById('review-stars');
+    const reviewRatingInput = document.getElementById('review-rating');
+
+    // Dynamically open review modal when "Add to Cart" is clicked (for demonstration purposes)
+    addReviewBtns.forEach(button => {
+        button.addEventListener('click', (e) => {
+            // In a real scenario, this would be a "Leave a Review" button or a prompt after purchase.
+            // For now, we'll use this to trigger the modal.
+            const productCard = e.target.closest('.product-card');
+            const productId = e.target.dataset.productId;
+            const productName = productCard.querySelector('h3').textContent;
+
+            reviewProductId.value = productId;
+            reviewProductName.value = productName;
+            reviewForm.reset();
+            reviewRatingInput.value = 0;
+            reviewStars.querySelectorAll('i').forEach(star => star.classList.replace('fas', 'far')); // Reset stars
+
+            openModal('review-modal');
+            alert(`Added "${productName}" to cart! Now, please leave a review! (Demo)`);
+        });
+    });
+
+    // Star rating functionality
+    if (reviewStars) {
+        reviewStars.addEventListener('click', (e) => {
+            if (e.target.tagName === 'I') {
+                const value = parseInt(e.target.dataset.value);
+                reviewRatingInput.value = value;
+                reviewStars.querySelectorAll('i').forEach((star, index) => {
+                    if (index < value) {
+                        star.classList.replace('far', 'fas');
+                    } else {
+                        star.classList.replace('fas', 'far');
+                    }
+                });
+            }
+        });
+    }
+
+    reviewForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const productId = reviewProductId.value;
+        const productName = reviewProductName.value;
+        const skinType = document.getElementById('review-skin-type').value;
+        const skinTone = document.getElementById('review-skin-tone').value;
+        const rating = reviewRatingInput.value;
+        const reviewText = document.getElementById('review-text').value.trim();
+
+        if (rating === '0' || reviewText === '') {
+            alert('Please provide a rating and a review message.');
+            return;
+        }
+
+        alert(`Review submitted for "${productName}" (ID: ${productId}) with rating ${rating} and text: "${reviewText}". (Conceptual)`);
+        console.log({ productId, productName, skinType, skinTone, rating, reviewText });
+        closeModals();
+        // In a real application, send this data to your backend.
+        // Update the 'My Reviews' tab dynamically.
+    });
+
+
+    // --- User Profile Tabs ---
+    const profileTabs = document.querySelectorAll('.profile-tabs .tab-button');
+    const profileTabContents = document.querySelectorAll('.profile-section .tab-content');
+
+    profileTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            profileTabs.forEach(t => t.classList.remove('active'));
+            profileTabContents.forEach(content => content.classList.remove('active'));
+
+            tab.classList.add('active');
+            const targetId = tab.dataset.tab;
+            document.getElementById(targetId).classList.add('active');
+        });
+    });
+
+    // Profile Settings Form
+    const accountSettingsForm = document.querySelector('.account-settings-form');
+    if (accountSettingsForm) {
+        accountSettingsForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Account settings saved! (Conceptual)');
+            // In a real app, send data to backend
+        });
+    }
+
+    // Example delete functionality for saved analyses / reviews
+    document.querySelectorAll('.delete-analysis').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            if (confirm('Are you sure you want to delete this analysis?')) {
+                e.target.closest('.analysis-card').remove();
+                alert('Analysis deleted. (Conceptual)');
+            }
+        });
+    });
+
+    document.querySelectorAll('.delete-review').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            if (confirm('Are you sure you want to delete this review?')) {
+                e.target.closest('.user-review-card').remove();
+                alert('Review deleted. (Conceptual)');
+            }
+        });
+    });
+
+    document.querySelectorAll('.edit-review').forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert('Edit review functionality would open the review modal pre-filled. (Conceptual)');
+            // Populate review modal with existing review data and open it
+        });
+    });
+
+    // --- Ingredient Checker Tool (Conceptual) ---
+    const analyzeIngredientsBtn = document.getElementById('analyze-ingredients-btn');
+    const ingredientListInput = document.getElementById('ingredient-list-input');
+    const ingredientResultsDiv = document.querySelector('.ingredient-results');
+    const ingredientBreakdownDiv = document.getElementById('ingredient-breakdown');
+    const concernSuitabilityDiv = document.querySelector('.concern-suitability');
+
+    analyzeIngredientsBtn.addEventListener('click', () => {
+        const inputText = ingredientListInput.value.trim();
+        if (!inputText) {
+            alert('Please paste an ingredient list to analyze.');
+            return;
+        }
+
+        // Simulating ingredient parsing and analysis
+        const ingredients = inputText.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        let breakdownHTML = '<h4>Ingredients Breakdown:</h4>';
+        let hasComedogenic = false;
+        let hasIrritants = false;
+
+        ingredients.forEach(ing => {
+            let note = '';
+            // Very simplified mock logic
+            if (ing.toLowerCase().includes('parfum') || ing.toLowerCase().includes('fragrance')) {
+                note = '<span class="note">(Common Irritant for Sensitive Skin)</span>';
+                hasIrritants = true;
+            } else if (ing.toLowerCase().includes('alcohol denat')) {
+                note = '<span class="note">(Drying, Potentially Irritating)</span>';
+                hasIrritants = true;
+            } else if (ing.toLowerCase().includes('coconut oil') || ing.toLowerCase().includes('isopropyl myristate')) {
+                note = '<span class="note">(Highly Comedogenic - can clog pores)</span>';
+                hasComedogenic = true;
+            } else if (ing.toLowerCase().includes('salicylic acid') || ing.toLowerCase().includes('niacinamide')) {
+                 note = '<span class="note">(Beneficial for Acne/Oil Control)</span>';
+            } else if (ing.toLowerCase().includes('hyaluronic acid') || ing.toLowerCase().includes('glycerin')) {
+                note = '<span class="note">(Hydrating)</span>';
+            }
+            breakdownHTML += `<p><strong>${ing}</strong> ${note}</p>`;
+        });
+
+        ingredientBreakdownDiv.innerHTML = breakdownHTML;
+
+        // Update suitability messages
+        let suitabilityHTML = '<h4>Suitability for Specific Concerns:</h4>';
+        suitabilityHTML += `<p><i class="fas ${hasComedogenic ? 'fa-times-circle danger-icon' : 'fa-check-circle success-icon'}"></i> <span class="concern-text">${hasComedogenic ? 'Not Recommended' : 'Suitable'} for Acne-Prone Skin</span> (${hasComedogenic ? 'Contains known pore-clogging ingredients.' : 'No known comedogenic ingredients found.'})</p>`;
+        suitabilityHTML += `<p><i class="fas ${hasIrritants ? 'fa-exclamation-triangle warning-icon' : 'fa-check-circle success-icon'}"></i> <span class="concern-text">${hasIrritants ? 'Use with Caution' : 'Generally Suitable'} for Sensitive Skin</span> (${hasIrritants ? 'Contains potential irritants.' : 'No common irritants found.'})</p>`;
+
+        // Add more suitability checks as needed (e.g., for rosacea, dry skin, etc.)
+        // This is where integration with a larger ingredient database would be powerful.
+
+        concernSuitabilityDiv.innerHTML = suitabilityHTML;
+
+        ingredientResultsDiv.style.display = 'block';
+        alert('Ingredients analyzed! See the breakdown below.');
+    });
+
+    // --- Newsletter Subscription (Conceptual) ---
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailInput = newsletterForm.querySelector('input[type="email"]');
+            if (emailInput.value.trim() !== '') {
+                alert(`Thank you for subscribing, ${emailInput.value}!`);
+                emailInput.value = '';
+                // In a real app, send email to your mailing list service
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        });
+    }
+
+    // --- Before & After Gallery Filtering (Conceptual) ---
+    const gallerySkinConditionFilter = document.getElementById('gallery-skin-condition');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+
+    if (gallerySkinConditionFilter) {
+        gallerySkinConditionFilter.addEventListener('change', () => {
+            const selectedCondition = gallerySkinConditionFilter.value;
+            galleryItems.forEach(item => {
+                const itemCondition = item.dataset.condition;
+                if (selectedCondition === 'all' || itemCondition === selectedCondition) {
+                    item.style.display = 'flex'; // Show
+                } else {
+                    item.style.display = 'none'; // Hide
+                }
+            });
+        });
+    }
+
+    // Initial gallery filter apply
+    if (galleryItems.length > 0) {
+        gallerySkinConditionFilter.dispatchEvent(new Event('change'));
+    }
+});</script>
+</body>
+</html>

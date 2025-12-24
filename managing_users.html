@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Managing User Accounts</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 40px;
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff0f5;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    h1 {
+      color: #cc2e6d;
+      margin-bottom: 30px;
+      font-size: 26px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      text-decoration: none;
+      color: #cc2e6d;
+      font-weight: bold;
+    }
+
+    .back-link i {
+      margin-right: 6px;
+    }
+
+    .step {
+      background: #ffffff;
+      border-left: 6px solid #cc2e6d;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .step h2 {
+      margin: 0 0 10px;
+      color: #cc2e6d;
+    }
+
+    .step p,
+    .step ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .step ul li {
+      margin-bottom: 6px;
+    }
+
+    .step i {
+      margin-right: 8px;
+      color: #cc2e6d;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔙 Back to Admin Panel -->
+  <a href="admin.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Admin Panel</a>
+
+  <h1><i class="fas fa-users-cog"></i> Managing User Accounts</h1>
+
+  <div class="step">
+    <h2><i class="fas fa-sign-in-alt"></i> Step 1: Login to the Admin Dashboard</h2>
+    <p>Enter your admin credentials and go to the main dashboard.</p>
+  </div>
+
+  <div class="step">
+    <h2><i class="fas fa-users"></i> Step 2: Access the User Management Section</h2>
+    <p>From the menu, click on <strong>"Users"</strong> to open the user management table.</p>
+  </div>
+
+  <div class="step">
+    <h2><i class="fas fa-user-plus"></i> Step 3: Add a New User</h2>
+    <ul>
+      <li>Click the <strong>"Add User"</strong> button.</li>
+      <li>Fill out the form with user details like name, email, password, and role.</li>
+      <li>Click <strong>"Save"</strong> to create the new user account.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2><i class="fas fa-user-edit"></i> Step 4: Edit Existing Users</h2>
+    <ul>
+      <li>Find the user in the table and click the <strong>"Edit"</strong> icon.</li>
+      <li>Update the fields you want to change (e.g., email or role).</li>
+      <li>Click <strong>"Update"</strong> to save changes.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2><i class="fas fa-user-minus"></i> Step 5: Delete a User</h2>
+    <ul>
+      <li>Click the <strong>"Delete"</strong> icon next to the user you want to remove.</li>
+      <li>Confirm the deletion in the popup dialog.</li>
+      <li>The user will be permanently removed from the system.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2><i class="fas fa-search"></i> Step 6: Search or Filter Users</h2>
+    <p>Use the search box to find specific users quickly by name, email, or role.</p>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Makeup Recommender</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      margin: 20px;
+    }
+    video, canvas {
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .product-card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px;
+      width: 200px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+    .product-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Makeup Recommendation</h1>
+
+  <video id="video" width="400" height="300" autoplay muted></video><br>
+  <button onclick="capture()">Capture</button>
+
+  <canvas id="canvas" width="400" height="300" style="display:none;"></canvas>
+
+  <p id="result">📋 Tip will appear here after scanning your face.</p>
+  <div id="products"></div>
+
+  <!-- Load face-api.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+
+  <script>
+    const video = document.getElementById('video');
+
+    async function startCamera() {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      video.srcObject = stream;
+    }
+
+    async function loadModels() {
+      await faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/npm/face-api.js/models');
+    }
+
+    async function capture() {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const detection = await faceapi.detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions());
+
+      if (detection) {
+        const faceWidth = detection.box.width;
+        document.getElementById("result").textContent = `📏 Face width: ${faceWidth.toFixed(2)} px`;
+
+        // Send width to PHP API and get product recommendations
+        fetch("makeup_api.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ face_width: faceWidth })
+        })
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById("products");
+          container.innerHTML = ""; // Clear previous
+
+          if (data.status === "success" && data.products.length > 0) {
+            data.products.forEach(p => {
+              container.innerHTML += `
+                <div class="product-card">
+                  <img src="${p.image_url}" alt="${p.name}" />
+                  <h3>${p.name}</h3>
+                  <p>${p.description}</p>
+                </div>
+              `;
+            });
+          } else {
+            container.innerHTML = "<p>No products found for this face type.</p>";
+          }
+        });
+      } else {
+        document.getElementById("result").textContent = "❌ No face detected. Try again!";
+        document.getElementById("products").innerHTML = "";
+      }
+    }
+
+    // Initialize camera and model
+    loadModels().then(startCamera);
+  </script>
+</body>
+</html>

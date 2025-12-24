@@ -1,0 +1,44 @@
+<video id="video" autoplay></video>
+<canvas id="canvas" style="display:none;"></canvas>
+<button onclick="analyzeSkin()">Analyze</button>
+<div id="result"></div>
+
+<script>
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {
+    document.getElementById('video').srcObject = stream;
+  });
+
+function analyzeSkin() {
+    const canvas = document.getElementById('canvas');
+    const video = document.getElementById('video');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0);
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    let totalBrightness = 0;
+    for (let i = 0; i < imageData.data.length; i += 40) { // every ~10th pixel
+        const r = imageData.data[i];
+        const g = imageData.data[i + 1];
+        const b = imageData.data[i + 2];
+        const brightness = (r + g + b) / 3;
+        totalBrightness += brightness;
+    }
+    const avg = totalBrightness / (imageData.data.length / 40);
+    let result = "";
+    if (avg > 200) result = "Your skin appears oily or shiny.";
+    else if (avg > 100) result = "Your skin appears normal.";
+    else result = "Your skin appears dry or dull.";
+
+    document.getElementById("result").innerText = result;
+
+    // Send result to PHP
+    fetch("save_result.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "analysis_result=" + encodeURIComponent(result)
+    });
+}
+</script>

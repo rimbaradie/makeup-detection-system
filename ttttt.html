@@ -1,0 +1,12 @@
+<button onclick="fetchCart()">Order Now</button>
+
+<div id="orderModal" style="display: none; background: #fff; padding: 20px; border: 1px solid black;">
+  <h2>Confirm Order</h2>
+</div>
+
+<script>
+function fetchCart() {
+  console.log("Modal should open");
+  document.getElementById('orderModal').style.display = 'block';
+}
+</script>

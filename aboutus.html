@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us - SkinGlam</title>
+  <style>
+
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    box-sizing: border-box;
+    font-family: 'Playfair Display', serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #fff0f5;
+    color: #6a1b9a;
+    text-align: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 80px;
+    background: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+    z-index: 1000;
+    animation: fadeInDown 1s ease forwards;
+}
+
+@keyframes fadeInDown {
+    0% { transform: translateY(-100%); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 80px;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #6a1b9a;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    background-color: #ffb6c1;
+    color: white;
+}
+
+.contact-hero {
+    margin-top: 100px;
+    padding: 80px 20px;
+    background: linear-gradient(to right, #ffc0cb, #ffe4e1);
+    color: #6a1b9a;
+    animation: fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.contact-hero h1 {
+    font-size: 42px;
+    font-weight: bold;
+    text-shadow: 1px 1px 4px rgba(255, 105, 180, 0.3);
+}
+
+.contact-hero p {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.contact-info {
+    padding: 50px 20px;
+    background-color: #ffeef8;
+}
+
+.contact-info h2 {
+    font-size: 32px;
+    color: #c2185b;
+    margin-bottom: 20px;
+}
+
+.contact-info p {
+    font-size: 18px;
+    color: #6a1b9a;
+    margin-bottom: 10px;
+}
+
+.contact-form {
+    padding: 30px 20px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    animation: fadeInUp 1.2s ease forwards;
+}
+
+@keyframes fadeInUp {
+    0% { transform: translateY(40px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #e1bee7;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: #f48fb1;
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+}
+
+.submit-button {
+    background: #ff69b4;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-family: 'Cormorant Garamond', serif;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+    background: #f48fb1;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+  </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <header>
+            <div class="logo-container">
+                <img src="skinlogo.png" alt="SkinGlam Logo" class="logo">
+            </div>
+            <nav>
+                <ul>
+                   <li><a href="homeproject.html">Home</a></li>
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Skin</a></li>
+        <li><a href="#">Doctors</a></li>
+        <li><a href="#">About Us</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section class="contact-hero">
+            <h1>Contact SkinGlam</h1>
+            <p>We’d love to hear from you! Get in touch for reservations, feedback, or inquiries.</p>
+        </section>
+
+        <section class="contact-info">
+            <h2>Get in Touch</h2>
+            <p>Visit us at:</p>
+            <p>SkinGlam Beauty, 123 Beauty Avenue, Glam City</p>
+            <p>Call us at: +961 76 810 314 or +961 76 328 922</p>
+            <p>Email: rd2025@skinglam.com</p>
+        </section>
+
+        <section class="contact-form" runat="server">
+            <h2>Leave us your impression</h2>
+            <form>
+                <input type="text" name="name" placeholder="Your Name" required />
+                <input type="email" name="email" placeholder="Your Email" required />
+                <textarea name="message" placeholder="Your Message" required></textarea>
+                <button type="submit" class="submit-button" id="btnSendMessage" runat="server" onserverclick="SendMessage_Click">Send Message</button>
+                <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Font-Bold="true" Visible="false"></asp:Label>
+            </form>
+        </section>
+    </form>
+</body>
+</html>

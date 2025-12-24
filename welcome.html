@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="3;url=homeproject.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to SkinGlam</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Playfair Display', serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #fff0f5, #ffe6f0);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .logo {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-fit: cover;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      animation: pop 1.5s ease-in-out;
+    }
+
+    h1 {
+      margin-top: 25px;
+      font-size: 2.8em;
+      color: #d63384;
+      animation: fadeIn 2s ease;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #555;
+      margin-top: 10px;
+      animation: fadeIn 2s ease 0.3s backwards;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <img src="skinlogo.png" alt="SkinGlam Logo" class="logo" />
+  <h1>Welcome to SkinGlam</h1>
+  <p>Glow with Confidence ✨</p>
+</body>
+</html>

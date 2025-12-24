@@ -1,0 +1,9 @@
+Array
+(
+    [fname] => Line
+    [lname] => Aoun
+    [username] => lino
+    [email] => line@example.com
+    [password] => line
+    [skin_type] => Combination
+)

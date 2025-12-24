@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermGlam - Makeup Recommended by Dermatologists</title>
+    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+  <style>
+  .btn-light-pink {
+  background-color: var(--bg-white); /* خلفية بيضاء */
+  color: var(--primary-color);       /* نص وردي */
+  border: 2px solid var(--primary-color); /* إطار وردي */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-light-pink:hover {
+  background-color: var(--primary-color); /* الخلفية تصبح وردي */
+  color: white;                            /* النص يصبح أبيض */
+}
+
+    #analyze-btn {
+  background-color: #FF69B4 !important; /* Hot Pink */
+  color: white !important;
+  border: none !important;
+  transition: background-color 0.3s ease;
+}
+
+#analyze-btn:hover {
+  background-color: #e05595 !important; /* لون أغمق للـ hover */
+}
+</style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <img src="pictures/skinlogo.png" alt="DermGlam Logo">
+                <h1>SkinGlam</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+                    <li><a href="#products" class="nav-link" data-section="products">Shop Products</a></li>
+                    <li><a href="#analyzer" class="nav-link" data-section="analyzer">Skin Analyzer</a></li>
+                    <li><a href="#blog" class="nav-link" data-section="blog">Conversations</a></li>
+                    <li><a href="#dermatologists" class="nav-link" data-section="dermatologists">Our Experts</a></li>
+                    <li><a href="#profile" class="nav-link" data-section="profile">My Profile</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+  <div class="search-box">
+    <input type="text" placeholder="Search products...">
+    <i class="fas fa-search"></i>
+  </div>
+  <button class="cart-btn"><i class="fas fa-shopping-cart"></i> <span class="cart-count">0</span></button>
+  <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+</div>
+
+<div id="order-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
+    background: rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
+  <div style="background:#fff; padding:20px; border-radius:8px; width:400px; max-height:80vh; overflow-y:auto; position:relative;">
+    <button id="close-modal" style="position:absolute; top:10px; right:10px; font-size:18px; background:none; border:none; cursor:pointer;">×</button>
+    <h2>Your Order Items</h2>
+    <ul id="order-items-list" style="list-style:none; padding:0; margin:0;"></ul>
+  </div>
+</div>
+
+<script>
+  const cartBtn = document.querySelector('.cart-btn');
+const orderModal = document.getElementById('order-modal');
+const orderItemsList = document.getElementById('order-items-list');
+const closeModalBtn = document.getElementById('close-modal');
+
+function loadCartItems() {
+  fetch('get_order_items.php')
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const items = data.items;
+
+        // حساب مجموع الكميات
+        const totalQuantity = items.reduce((sum, item) => sum + Number(item.quantity), 0);
+        document.querySelector('.cart-count').textContent = totalQuantity;
+
+        if (items.length === 0) {
+          orderItemsList.innerHTML = '<p>Your cart is empty.</p>';
+        } else {
+          orderItemsList.innerHTML = items.map(item => `
+            <li style="border-bottom:1px solid #ddd; padding:8px 0; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong>${item.name}</strong> - Quantity: ${item.quantity} - Price: $${parseFloat(item.price).toFixed(2)}
+              </div>
+              <button onclick="deleteCartItem(${item.cart_item_id})" 
+                style="background:none; border:none; cursor:pointer; color:#ff69b4; font-size:18px;"
+                title="Delete item">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </li>
+          `).join('');
+        }
+       orderModal.style.display = 'flex'; // ✅ أضف هذا بعد تحميل العناصر
+
+        
+
+      } else {
+        alert('Failed to load cart items: ' + data.message);
+      }
+    })
+    .catch(err => {
+      console.error('Error fetching cart items:', err);
+      alert('Error fetching cart items.');
+    });
+}
+
+function deleteCartItem(cart_item_id) {
+  if (!confirm('Are you sure you want to remove this item from the cart?')) return;
+
+  fetch('delete_cart_item2.php', { 
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'cart_item_id=' + encodeURIComponent(cart_item_id)
+  })
+  .then(response => response.json())
+  .then(data => {
+    alert(data.message);
+    if (data.success) {
+      loadCartItems();           // إعادة تحميل العناصر
+      updateCartCountOnly();     // ✅ تحديث العدد مباشرةً
+    }
+  })
+  .catch(err => {
+    console.error('Error:', err);
+    alert('Something went wrong.');
+  });
+}
+
+
+function updateCartCountOnly() {
+  fetch('get_order_items.php')
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const items = data.items;
+        const totalQuantity = items.reduce((sum, item) => sum + Number(item.quantity), 0);
+        document.querySelector('.cart-count').textContent = totalQuantity;
+      } else {
+        console.warn('Failed to load cart count:', data.message);
+      }
+    })
+    .catch(err => {
+      console.error('Error updating cart count:', err);
+    });
+}
+
+
+cartBtn.addEventListener('click', () => {
+  loadCartItems();
+});
+
+
+closeModalBtn.addEventListener('click', () => {
+  orderModal.style.display = 'none';
+});
+
+// إغلاق المودال عند الضغط خارج المحتوى
+orderModal.addEventListener('click', (e) => {
+  if (e.target === orderModal) {
+    orderModal.style.display = 'none';
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+   updateCartCountOnly();
+  });
+
+  function updateCartCountOnly() {
+  fetch('get_order_items.php')
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const items = data.items;
+        const totalQuantity = items.reduce((sum, item) => sum + Number(item.quantity), 0);
+        document.querySelector('.cart-count').textContent = totalQuantity;
+      } else {
+        console.warn('Failed to load cart count:', data.message);
+      }
+    })
+    .catch(err => {
+      console.error('Error updating cart count:', err);
+    });
+}
+
+</script>
+
+
+
+    </header>
+
+    <main>
+        <style>
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.video-background video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.6);
+}
+
+.hero-buttons .btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    animation: pop-in 0.8s ease-out forwards;
+    transform: scale(0);
+    opacity: 0;
+}
+
+.hero-buttons .btn:nth-child(1) {
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+}
+
+.hero-buttons .btn:nth-child(2) {
+    background-color: #fff;
+    color: #ff69b4;
+    border: 2px solid #ff69b4;
+}
+
+@keyframes pop-in {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+#playWithSound {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+    background-color: rgba(255, 105, 180, 0.8);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+#toggleSound {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 2px solid #ff69b4;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(255, 105, 180, 0.3);
+}
+
+#toggleSound:hover {
+    background-color: rgba(255, 105, 180, 0.3);
+    transform: scale(1.1);
+}
+
+
+
+</style>
+
+<section id="home" class="hero-section active-section" style="position: relative; overflow: visible; min-height: 100vh;">
+    <!-- فيديو خلفي -->
+    <div class="video-background">
+        <video id="myVideo" autoplay muted loop playsinline>
+            <source src="pictures/Skinvideo.MOV" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- زر تشغيل الصوت -->
+    <button id="toggleSound"><i class="fas fa-volume-mute"></i></button>
+
+
+
+    <div class="container" style="position: relative; z-index: 1; padding-top: 100px; text-align: center; color: white;">
+        <div class="hero-content">
+            <h2 style="font-size: 2.5em; font-weight: bold;">Your Skin, Dermatologist Approved.</h2>
+            <p style="font-size: 1.2em; margin: 20px auto; max-width: 600px;">
+                Discover makeup that loves your skin, curated and recommended by leading dermatologists.
+            </p>
+
+            <div class="hero-buttons" style="margin-top: 30px;">
+                <button id="analyze-btn" class="btn btn-secondary scroll-to-analyzer" style="margin: 10px;">Analyze My Skin</button>
+                <button class="btn btn-light-pink scroll-to-products" style="margin: 10px;">Shop Now</button>
+            </div>
+
+            <blockquote class="expert-quote" style="margin-top: 40px; background: rgba(255, 255, 255, 0.1); padding: 20px; border-left: 5px solid #ff69b4; max-width: 600px; margin-left: auto; margin-right: auto;">
+                “Dermatologist-approved ingredients that enhance, not harm, your skin.”
+                <cite style="display: block; margin-top: 10px; color: #ff1493; font-size: 2em; font-weight: bold; font-family: 'Playfair Display', serif;">
+    Welcome to world SkinGlam
+</cite>
+
+
+            </blockquote>
+        </div>
+    </div>
+
+    
+    <!-- Wave Divider (optional) -->
+    <div class="wave-divider" style="position: absolute; bottom: 0; left: 0; width: 100%;">
+        <svg viewBox="0 0 1440 320">
+            <path fill="#fff" fill-opacity="1" d="M0,128L1440,0L1440,320L0,320Z"></path>
+        </svg>
+    </div>
+
+    
+</section>
+
+<script>
+   const btn = document.getElementById('toggleSound');
+const video = document.getElementById('myVideo');
+const icon = btn.querySelector('i');
+
+btn.addEventListener('click', function () {
+    if (video.muted) {
+        video.muted = false;
+        video.play();
+        icon.classList.remove('fa-volume-mute');
+        icon.classList.add('fa-volume-up');
+    } else {
+        video.muted = true;
+        icon.classList.remove('fa-volume-up');
+        icon.classList.add('fa-volume-mute');
+    }
+});
+
+</script>
+
+
+
+
+    <section id="products" class="products-section hidden-section">
+    <div class="container">
+        <h2>Dermatologist-Approved Makeup</h2>
+        <form method="GET" action="products.php" id="filter-form">
+            <div class="product-filters">
+                <div class="filter-group">
+                    <label for="skin-type-filter"><i class="fas fa-magic"></i> Skin Type:</label>
+                    <select id="skin-type-filter" name="skin_type_filter">
+                       <option value="all">All</option> 
+    <option value="Oily">Oily</option>
+    <option value="Dry">Dry</option>
+    <option value="Normal">Normal</option>
+    <option value="Combination">Combination</option>
+    
+
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="brand-filter"><i class="fas fa-tag"></i> Brand:</label>
+                    <select id="brand-filter" name="brand_filter">
+                        <option value="all">All</option>
+                        <option value="SHEGLAM">SHEGLAM</option>
+                        <option value="Neutrogena">Neutrogena</option>
+                        <option value="CeraVe">CeraVe</option>
+                         <option value="The Ordinary">The Ordinary</option>
+                         <option value="Cetaphil">Cetaphil</option>
+                         <option value="La Roche-Posay">La Roche-Posay</option>
+                             <option value="Glow Recipe">Glow Recipe</option>
+                            <option value="Paula Choice">Paulas Choice</option>
+                    </select>
+                </div>
+            </div>
+            <style>
+                .filter-button-wrapper {
+    display: flex;
+    justify-content: center;  /* أفقياً بالنص */
+    margin-top: 40px;
+}
+
+.btn-filter {
+    background-color: #ffb6c1;
+    color: white;
+    border: none;
+    padding: 10px 40px; /* كبرنا الزر هون */
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 15px; /* خط أكبر */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(255, 182, 193, 0.6);
+}
+
+.btn-filter:hover {
+    background-color: #ff69b4;
+    transform: scale(1.07);
+    box-shadow: 0 10px 28px rgba(255, 105, 180, 0.7);
+}
+
+            </style>
+
+           <div class="filter-button-wrapper">
+    <button id="filterBtn" type="button" class="btn btn-filter">Filter</button>
+</div>
+
+        </form>
+
+       <div id="productsContainer" class="product-grid"></div>
+       <div class="order-now-wrapper" style="text-align: center; margin-top: 30px;">
+  <form action="place_order.php" method="POST">
+   <button type="button" onclick="fetchCheckout()" class="btn btn-filter">Order Now</button>
+
+
+  </form>
+</div>
+<div id="checkoutModal" class="modal-overlay" style="display: none;">
+  <div class="modal-box">
+    <h2>Confirm the order</h2>
+    <div id="checkoutContent"></div>
+    <div class="actions" style="text-align: center; margin-top: 20px;">
+      <form id="confirmForm">
+        <label for="paymentMethod">Choose Payment Method:</label>
+        <select id="paymentMethod" name="payment_method" required style="margin-top: 10px; padding: 8px; border-radius: 8px;">
+          <option value="cash">Cash</option>
+          <option value="credit_card">Credit Card</option>
+          <option value="paypal">PayPal</option>
+        </select>
+        <br><br>
+        <button type="submit" class="confirm">Confirm</button>
+        <button type="button" class="cancel" onclick="closeCheckoutModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('confirmForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // يمنع إعادة تحميل الصفحة
+
+  const paymentMethod = document.getElementById('paymentMethod').value;
+
+  fetch('place_order.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      payment_method: paymentMethod
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Order placed successfully!');
+      closeCheckoutModal();
+      updateCartCountOnly();
+      // هنا ممكن تعمل reset للـ cart أو تحدث واجهة المستخدم
+    } else {
+      alert(data.message || 'An error occurred. Please try again.');
+    }
+  })
+  .catch(() => alert('Connection error. Please check your internet.'));
+});
+
+
+
+</script>
+<style>
+#productsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Space between columns */
+  gap: 20px; /* مسافة بين العناصر */
+}
+
+.product-item {
+  flex: 0 0 calc(33.333% - 13.33px); /* 3 في الصف، ناقص الـ gap */
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.product-item:hover {
+  transform: translateY(-5px);
+}
+
+@media screen and (max-width: 768px) {
+  .product-item {
+    flex: 0 0 calc(50% - 10px); /* صفين على الشاشات الصغيرة */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .product-item {
+    flex: 0 0 100%; /* منتج واحد في الصف */
+  }
+}
+
+.product-item img {
+    max-width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    
+}
+
+
+.product-item h3 {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+.product-item .price {
+    font-weight: bold;
+    color: #C2185B;
+    margin: 6px 0;
+}
+
+.product-item .tags {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.product-item .tag {
+    background: #eee;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+}
+
+.expert-comment {
+    font-size: 0.85em;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.product-rating {
+    color: #FFD700;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+}
+
+.btn-add-to-cart {
+    background-color: #ff69b4;
+    color: white;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+.btn-add-to-cart:hover {
+    background-color: #ff1493;
+}
+.product-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-action {
+    background-color: #ffe4e1;
+    color: #C2185B;
+    border: 1px solid pink;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+    background-color: #ffb6c1;
+    color: white;
+}
+
+.btn-like {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: transparent; /* قلب شفاف من الداخل */
+  -webkit-text-stroke: 1.5px pink; /* يعطي حد وردي للقلب */
+  transition: color 0.3s ease, -webkit-text-stroke-color 0.3s ease;
+}
+
+.btn-like.active {
+  color: #ff1493; /* لون داخلي وردي فاقع */
+  -webkit-text-stroke-color: transparent; /* شيل الحد لما يكون ملون */
+}
+
+
+.btn-like i {
+  background: transparent; /* تأكدي إنه الأيقونة نفسها شفافة الخلفية */
+}
+
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ff1493;
+  color: white;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  z-index: 2;
+  box-shadow: 0 0 5px rgba(255,20,147,0.7);
+}
+
+.product-item {
+  position: relative; /* لاحتواء الbadge */
+}
+
+.price-old {
+  text-decoration: line-through;
+  color: #c2185b;
+  opacity: 0.7;
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.price-new {
+  color: #ff1493;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+</style>
+
+
+<script>
+document.getElementById('filterBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+
+    const skinType = document.getElementById('skin-type-filter').value;
+    const brand = document.getElementById('brand-filter').value;
+
+    const url = `fetch_products.php?skin_type=${encodeURIComponent(skinType)}&brand=${encodeURIComponent(brand)}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(products => {
+           const container = document.getElementById('productsContainer');
+container.innerHTML = ''; // Clear previous content
+if (products.length === 0) {
+            container.innerHTML = '<p style="text-align:center; width:100%; font-size:1.2em; color:#888;">No products found for the selected filters.</p>';
+            return;
+        }
+
+// أضف div يحتوي على class="row"
+const row = container; // ما بدنا نضيف div جديد، رح نضيف العناصر مباشرة
+
+
+    
+
+
+
+products.forEach(product => {
+  const col = document.createElement('div');
+  col.className = 'product-item';
+    const isSoldOut = parseInt(product.stock_quantity) === 0;
+
+
+  const originalPrice = parseFloat(product.price);
+  const discountPercentage = parseFloat(product.discount_percentage || 0);
+  let priceHtml = '';
+
+  if (discountPercentage > 0) {
+    const discountedPrice = (originalPrice * (1 - discountPercentage / 100)).toFixed(2);
+    priceHtml = `
+      <div class="discount-badge">${discountPercentage}% OFF</div>
+      <p class="price">
+        <span class="price-old">$${originalPrice.toFixed(2)}</span>
+        <span class="price-new">$${discountedPrice}</span>
+      </p>
+    `;
+  } else {
+    priceHtml = `<p class="price">$${originalPrice.toFixed(2)}</p>`;
+  }
+
+  col.innerHTML = `
+    ${isSoldOut ? '<div class="discount-badge" style="background:#999;">Sold Out</div>' : ''}
+    <img src="${product.image_product}" alt="${product.name}">
+    <h3>${product.name}</h3>
+    ${priceHtml}
+    <div class="tags">
+      <span class="tag skin-type">${product.skin_type || 'All Skin Types'}</span>
+      <span class="tag ingredient">${product.ingredient || 'Dermatologist-Approved'}</span>
+    </div>
+    <div class="expert-comment">
+      <i class="fas fa-user-md"></i>
+      <p>${product.comment || '"Tested by skin experts."'}</p>
+    </div>
+    
+    <div class="product-item">
+    <input type="number" class="quantity-input" min="1" value="1" />
+    <button class="btn btn-add-to-cart" data-product-id="${product.product_id}">Add to Cart</button>
+    </div>
+    <div class="product-actions">
+      <button class="btn-like" aria-label="Like" data-product-id="${product.product_id}">
+        <i class="fas fa-heart"></i>
+      </button>
+      <button class="btn-action comment-btn" data-product-id="${product.product_id}">
+        <i class="fas fa-comment"></i> Comment
+      </button>
+      
+    </div>
+  `;
+
+container.appendChild(col);
+});
+
+document.querySelectorAll('.btn-add-to-cart').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const productId = btn.dataset.productId;
+    const quantityInput = btn.closest('.product-item').querySelector('.quantity-input');
+
+    if (!quantityInput) {
+      alert('Quantity field not found!');
+      return;
+    }
+
+    const quantity = parseInt(quantityInput.value) || 1;
+
+    fetch('add_to_cart.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        product_id: productId,
+        quantity: quantity
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert(quantity + ' item(s) added to cart successfully');
+        updateCartCountOnly();
+
+      } else {
+        alert(data.message || 'Failed to add item');
+      }
+    })
+    .catch(err => {
+      console.error('Fetch Error:', err);
+      alert('Server connection error: ' + err.message);
+    });
+  });
+});
+
+
+
+function refreshFavorites() {
+  fetch('get_favorites.php')
+    .then(response => response.json())
+    .then(products => {
+      const noFavMsg = document.getElementById('no-favorites');
+      if (products.length === 0) {
+        noFavMsg.style.display = 'block';
+      } else {
+        noFavMsg.style.display = 'none';
+        loadFavorites(products);
+      }
+    })
+    .catch(error => {
+      console.error('Error refreshing favorites:', error);
+    });
+}
+
+
+
+document.querySelectorAll('.btn-like').forEach(button => {
+  button.addEventListener('click', () => {
+    const productId = button.dataset.productId;
+
+    fetch('like_product.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({ product_id: productId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Toggle class based on liked or not
+        if (data.liked) {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+         refreshFavorites();
+      } else {
+        alert(data.message || 'Something went wrong');
+      }
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      alert('Failed to like/unlike product.');
+    });
+  });
+});
+
+
+
+
+
+        })
+        .catch(err => {
+            console.error('Error fetching products:', err);
+        });
+});
+
+document.querySelectorAll('.footer-skin-link').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+
+    const href = link.getAttribute('href'); // مثال: #products?skin=Oily
+    const [targetId, queryString] = href.substring(1).split('?');
+
+    // إظهار قسم المنتجات
+    document.querySelectorAll('section').forEach(section => {
+      section.classList.add('hidden-section');
+    });
+
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+      targetSection.classList.remove('hidden-section');
+      targetSection.scrollIntoView({ behavior: 'smooth' });
+
+      const skinTypeFilter = document.getElementById('skin-type-filter');
+      const brandFilter = document.getElementById('brand-filter');
+
+      const params = new URLSearchParams(queryString);
+
+      if (params.has('skin') && skinTypeFilter) {
+        const skinValue = capitalizeFirstLetter(params.get('skin')); // مثل Oily
+        // تأكد إنه موجود بالخيارات
+        if ([...skinTypeFilter.options].some(opt => opt.value === skinValue)) {
+          skinTypeFilter.value = skinValue;
+        }
+      }
+
+      if (brandFilter) {
+        brandFilter.value = 'all';
+      }
+
+      // نفذ الفلترة
+      const filterBtn = document.getElementById('filterBtn');
+      if (filterBtn) {
+        filterBtn.click();
+      } else {
+        console.warn('زر الفلترة مش موجود!');
+      }
+    }
+  });
+});
+
+
+// وظيفة تساعد على تحويل "oily" → "Oily"
+function capitalizeFirstLetter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+
+
+function openCheckoutModal() {
+  const modal = document.getElementById('checkoutModal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeCheckoutModal() {
+  const modal = document.getElementById('checkoutModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function fetchCheckout() {
+  fetch('get_cart_items.php')
+    .then(response => response.json())
+    .then(data => {
+      if (!data.success) {
+        alert(data.message || "Have an error");
+        return;
+      }
+
+      const checkoutDiv = document.getElementById('checkoutContent');
+      checkoutDiv.innerHTML = '';
+
+      if (data.items.length === 0) {
+        checkoutDiv.innerHTML = '<p>The basket is empty</p>';
+      } else {
+        data.items.forEach(item => {
+          const itemHTML = `
+            <div class="item-row" style="display: flex; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+              <img src="${item.image_url}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; margin-right: 10px;">
+              <div>
+                <strong>${item.product_name}</strong><br>
+                Quantity: ${item.quantity}<br>
+                Price: $${item.unit_price.toFixed(2)}<br>
+                Total: $${item.subtotal.toFixed(2)}
+              </div>
+            </div>`;
+          checkoutDiv.innerHTML += itemHTML;
+        });
+
+        checkoutDiv.innerHTML += `<div style="text-align: right; font-weight: bold; margin-top: 10px;">Total: $${data.total.toFixed(2)}</div>`;
+      }
+
+      openCheckoutModal();
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Failed to load basket");
+    });
+}
+
+// تأكد أن confirmForm موجود
+document.getElementById('confirmForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  const paymentMethod = document.getElementById('paymentMethod').value;
+
+  fetch('place_order.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ payment_method: paymentMethod })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Order placed successfully!');
+      
+      // ✅ امسح محتوى المودال قبل ما يتسكر
+      document.getElementById('checkoutContent').innerHTML = '';
+
+      // ✅ سكّر المودال
+      closeCheckoutModal();
+
+      // ✅ تحديث عدد السلة
+      updateCartCountOnly();
+    } else {
+      alert(data.message || 'An error occurred. Please try again.');
+    }
+  })
+  .catch(() => alert('Connection error. Please check your internet.'));
+});
+
+
+
+
+
+</script>
+<style>
+
+    .modal-overlay {
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  background: white;
+  width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.confirm {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.cancel {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.comments-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  width: 400px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+}
+
+.close-button {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#commentsList {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+#newComment {
+  width: 100%;
+  height: 60px;
+  margin-bottom: 10px;
+  resize: none;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#submitComment {
+  background-color: #ff69b4;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+</style>
+
+    </div>
+</section>
+
+<div id="commentsModal" class="comments-modal hidden">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <h3>Comments</h3>
+    <div id="commentsList">Loading comments...</div>
+    <textarea id="newComment" placeholder="Add your comment..."></textarea>
+    <button id="submitComment">Submit</button>
+  </div>
+</div>
+
+<script>
+let currentUserId = null;
+
+// 1. Load user ID from server
+fetch('get_user_id.php')
+  .then(response => response.json())
+  .then(data => {
+    currentUserId = data.user_id;
+  });
+
+const commentsModal = document.getElementById('commentsModal');
+const commentsList = document.getElementById('commentsList');
+const closeButton = document.querySelector('.close-button');
+const submitCommentBtn = document.getElementById('submitComment');
+const newCommentInput = document.getElementById('newComment');
+
+let currentProductId = null;
+
+// 2. Open modal on comment button click
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.comment-btn')) {
+    const productId = e.target.closest('.comment-btn').dataset.productId;
+    currentProductId = productId;
+    openCommentsModal(productId);
+  }
+});
+
+// 3. Close modal
+closeButton.addEventListener('click', () => {
+  commentsModal.classList.add('hidden');
+  newCommentInput.value = '';
+  commentsList.innerHTML = '';
+});
+
+// 4. Open modal and load comments
+function openCommentsModal(productId) {
+  commentsModal.classList.remove('hidden');
+  fetch(`get_comments.php?product_id=${productId}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.comments.length > 0) {
+        commentsList.innerHTML = data.comments.map(c => `
+          <div style="margin-bottom: 8px;" data-comment-id="${c.comment_id}">
+            <strong>${c.full_name}:</strong> ${c.comment_text}
+            <br><small style="color: gray;">${new Date(c.comment_date).toLocaleString()}</small>
+            ${currentUserId == c.user_id ? `<button class="delete-comment-btn" data-id="${c.comment_id}" style="margin-top: 4px; color: red; background:none; border:none; cursor:pointer;">Delete</button>` : ''}
+          </div>
+        `).join('');
+      } else {
+        commentsList.innerHTML = '<p>No comments yet.</p>';
+      }
+    });
+}
+
+// 5. Submit new comment
+submitCommentBtn.addEventListener('click', () => {
+  const comment = newCommentInput.value.trim();
+  if (!comment || !currentProductId) return;
+
+  fetch('submit_comment.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      product_id: currentProductId,
+      comment_text: comment
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      newCommentInput.value = '';
+      openCommentsModal(currentProductId); // reload comments
+    } else {
+      alert(data.message || 'Failed to submit comment.');
+    }
+  });
+});
+
+// 6. Delete comment (event delegation)
+commentsList.addEventListener('click', function(e) {
+  if (e.target.classList.contains('delete-comment-btn')) {
+    const commentId = e.target.dataset.id;
+
+    if (confirm('Are you sure you want to delete this comment?')) {
+      fetch('delete_comment.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ comment_id: commentId })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          openCommentsModal(currentProductId); // إعادة تحميل التعليقات
+        } else {
+          alert(data.message || 'Failed to delete comment.');
+        }
+      })
+      .catch(err => {
+        console.error('Error deleting comment:', err);
+        alert('An error occurred.');
+      });
+    }
+  }
+});
+
+
+</script>
+
+
+<style>
+  /* Pink-themed input and buttons */
+
+.analyzer-interface label {
+  font-weight: bold;
+  color: var(--primary-color);
+  display: block;
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+#skin_image {
+  border: 2px dashed var(--secondary-color);
+  background-color: var(--bg-light);
+  padding: 10px;
+  width: 100%;
+  max-width: 300px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: border-color 0.3s;
+}
+
+#skin_image:hover {
+  border-color: var(--primary-color);
+}
+
+.btn {
+  padding: 10px 18px;
+  font-size: 14px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-medium);
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+}
+
+.btn-secondary {
+  background-color: var(--accent-color);
+  color: var(--text-dark);
+  box-shadow: var(--shadow-light);
+}
+
+.btn-secondary:hover {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.hidden-section {
+  display: none;
+}
+.active-section {
+  display: block;
+}
+
+</style>
+
+   <section id="analyzer" class="analyzer-section hidden-section">
+            <div class="container">
+                <h2>AI Skin Analyzer</h2>
+                <p class="section-description">Use your camera for an instant, personalized skin analysis and product recommendations.</p>
+
+                <div class="analyzer-steps">
+                    <div class="step-card">
+                        <i class="fas fa-camera"></i>
+                        <h3>1. Capture Your Skin</h3>
+                        <p>Allow camera access and take a clear, well-lit photo of your face.</p>
+                    </div>
+                    <div class="step-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>2. AI Analyzes</h3>
+                        <p>Our intelligent system detects your skin type and identifies potential concerns.</p>
+                    </div>
+                    <div class="step-card">
+                        <i class="fas fa-palette"></i>
+                        <h3>3. Get Recommendations</h3>
+                        <p>Receive tailored makeup and skincare product suggestions.</p>
+                    </div>
+                </div>
+
+                <div class="analyzer-interface">
+
+  <!-- Upload Image -->
+  <form id="uploadForm" enctype="multipart/form-data">
+  <label for="skin_image">Upload an Image:</label>
+  <input type="file" name="skin_image" id="skin_image" accept="image/*" required>
+  <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Analyze Uploaded Image</button>
+</form>
+
+  <hr>
+
+  <div class="video-container">
+  <video id="webcam-feed" autoplay playsinline width="320" height="240"></video>
+  <canvas id="analyzer-canvas" style="display:none;"></canvas>
+</div>
+
+<button id="capture-btn" class="btn btn-secondary"><i class="fas fa-camera"></i> Capture Photo</button>
+
+<form id="cameraForm">
+  <input type="hidden" name="image_data" id="image_data">
+  <button type="submit" class="btn btn-primary"><i class="fas fa-magic"></i> Analyze Captured Photo</button>
+</form>
+
+  <hr>
+
+  <!-- Results Display -->
+  <div class="analyzer-results" style="display:none;">
+    <h3>Your Skin Analysis:</h3>
+    <div id="analysis-result"></div>
+  </div>
+
+</div>
+
+
+                <div class="quiz-fallback">
+                    <h3>No Camera? No Problem!</h3>
+                    <p>Take our quick skin type quiz instead to get personalized recommendations.</p>
+                   <button id="start-quiz-btn" class="btn btn-outline quiz-start-btn"><i class="fas fa-question-circle"></i> Start Skin Quiz</button>
+                </div>
+            </div>
+        </section>
+        
+
+        <div id="skin-quiz-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h3>Discover Your Skin Type</h3>
+                <form id="skin-quiz-form">
+                    <div class="quiz-question active-question" data-question="1">
+                        <h4>Q1: How does your skin feel an hour after washing?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q1" value="tight-dry"> Tight and dry</label>
+                            <label><input type="radio" name="q1" value="comfortable"> Comfortable, no issues</label>
+                            <label><input type="radio" name="q1" value="oily-tzone"> Oily T-zone, dry cheeks</label>
+                            <label><input type="radio" name="q1" value="shiny-all-over"> Shiny all over</label>
+                        </div>
+                    </div>
+                    <div class="quiz-question" data-question="2">
+                        <h4>Q2: How often do you experience breakouts?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q2" value="rarely"> Rarely, if ever</label>
+                            <label><input type="radio" name="q2" value="monthly"> Occasionally (around period)</label>
+                            <label><input type="radio" name="q2" value="frequently"> Frequently, cystic acne</label>
+                            <label><input type="radio" name="q2" value="tzone-only"> Only on my T-zone</label>
+                        </div>
+                    </div>
+                    <div class="quiz-question" data-question="3">
+                        <h4>Q3: How does your skin react to new products?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q3" value="no-issue"> No issues</label>
+                            <label><input type="radio" name="q3" value="redness-itching"> Redness, itching, stinging</label>
+                            <label><input type="radio" name="q3" value="breakouts"> Breakouts</label>
+                        </div>
+                    </div>
+                    <div class="quiz-controls">
+                        <button type="button" class="btn btn-secondary prev-question" style="display:none;"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button type="button" class="btn btn-primary next-question"><i class="fas fa-arrow-right"></i> Next</button>
+                        <button type="submit" class="btn btn-success submit-quiz" style="display:none;"><i class="fas fa-check"></i> Get Recommendations</button>
+                    </div>
+                </form>
+                <div id="quiz-results" style="display:none;">
+                    <h3>Your Quiz Results:</h3>
+                    <p>Based on your answers, your skin type is: <strong id="quiz-result-type"></strong></p>
+                    <p>Here are some recommended products for you:</p>
+                    <ul id="quiz-recommended-products-list"></ul>
+                    <button class="btn btn-primary view-products-btn"><i class="fas fa-box"></i> View Recommended Products</button>
+                </div>
+            </div>
+        </div>
+       
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const video = document.getElementById('webcam-feed');
+  const canvas = document.getElementById('analyzer-canvas');
+  const captureBtn = document.getElementById('capture-btn');
+  const imageDataInput = document.getElementById('image_data');
+  const analysisResultDiv = document.getElementById('analysis-result');
+  const analyzerResults = document.querySelector('.analyzer-results');
+
+  // Start webcam
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => video.srcObject = stream)
+    .catch(err => alert("Camera access denied: " + err));
+
+  // Capture photo from webcam
+  captureBtn.addEventListener('click', () => {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataURL = canvas.toDataURL('image/jpeg');
+    imageDataInput.value = dataURL;
+    alert("Photo captured! Now click 'Analyze Captured Photo'.");
+  });
+
+  // AJAX for Upload Image form
+  document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('analyzee_skin.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.text())
+    .then(data => {
+      analysisResultDiv.innerHTML = data;
+      analyzerResults.style.display = 'block';
+    })
+    .catch(err => alert('Error analyzing image: ' + err));
+  });
+
+  // AJAX for Camera captured photo form
+  document.getElementById('cameraForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('analyzee_skin.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.text())
+    .then(data => {
+      analysisResultDiv.innerHTML = data;
+      analyzerResults.style.display = 'block';
+    })
+    .catch(err => alert('Error analyzing photo: ' + err));
+  });
+});
+
+const quizStartBtn = document.getElementById('start-quiz-btn');
+  const skinQuizModal = document.getElementById('skin-quiz-modal');
+  const skinQuizForm = document.getElementById('skin-quiz-form');
+  const quizQuestions = skinQuizForm.querySelectorAll('.quiz-question');
+  const prevQuestionBtn = skinQuizForm.querySelector('.prev-question');
+  const nextQuestionBtn = skinQuizForm.querySelector('.next-question');
+  const submitQuizBtn = skinQuizForm.querySelector('.submit-quiz');
+  const quizResultsDiv = document.getElementById('quiz-results');
+  const quizResultType = document.getElementById('quiz-result-type');
+  const quizRecommendedProductsList = document.getElementById('quiz-recommended-products-list');
+  const viewRecommendedProductsBtn = document.querySelector('.view-products-btn');
+
+  const dummyRecommendations = {
+    'oily': ['Oil-Free Matte Foundation', 'Balancing Primer', 'Blemish Control Concealer'],
+    'dry': ['Hydrating Tinted Moisturizer SPF 30', 'Creamy Concealer', 'Dewy Finish Setting Spray'],
+    'sensitive': ['Gentle Mineral Concealer', 'Hypoallergenic Mascara', 'Fragrance-Free Lip Balm'],
+    'acne-prone': ['Oil-Free Matte Foundation', 'Blemish Control Concealer', 'Non-Comedogenic Powder'],
+    'combination': ['T-Zone Mattifying Primer', 'Hydrating Tinted Moisturizer SPF 30', 'Oil-Free Matte Foundation'],
+    'rosacea': ['Hydrating Tinted Moisturizer SPF 30', 'Green Color Corrector', 'Calming Face Powder'],
+    'eczema': ['Hydrating Tinted Moisturizer SPF 30', 'Sensitive Skin Concealer']
+  };
+
+  let currentQuestionIndex = 0;
+
+  function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  }
+
+  function showQuizQuestion(index) {
+    quizQuestions.forEach((q, i) => {
+      q.classList.remove('active-question');
+      if (i === index) q.classList.add('active-question');
+    });
+
+    prevQuestionBtn.style.display = (index === 0) ? 'none' : 'inline-flex';
+    nextQuestionBtn.style.display = (index === quizQuestions.length - 1) ? 'none' : 'inline-flex';
+    submitQuizBtn.style.display = (index === quizQuestions.length - 1) ? 'inline-flex' : 'none';
+  }
+
+  quizStartBtn.addEventListener('click', () => {
+    skinQuizForm.reset();
+    quizResultsDiv.style.display = 'none';
+    skinQuizForm.style.display = 'block';
+    currentQuestionIndex = 0;
+    showQuizQuestion(currentQuestionIndex);
+    openModal('skin-quiz-modal');
+  });
+
+  nextQuestionBtn.addEventListener('click', () => {
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+    const selected = currentQuestion.querySelector('input[type="radio"]:checked');
+    if (!selected) return alert("Please select an option first.");
+    currentQuestionIndex++;
+    showQuizQuestion(currentQuestionIndex);
+  });
+
+  prevQuestionBtn.addEventListener('click', () => {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      showQuizQuestion(currentQuestionIndex);
+    }
+  });
+
+  skinQuizForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const answers = {};
+    quizQuestions.forEach(q => {
+      const input = q.querySelector('input[type="radio"]:checked');
+      if (input) answers[input.name] = input.value;
+    });
+
+    let deducedSkinType = 'Normal';
+    let recommendations = [];
+
+    if (answers.q1 === 'tight-dry') {
+      deducedSkinType = 'Dry';
+      recommendations = dummyRecommendations['dry'];
+    } else if (answers.q1 === 'shiny-all-over') {
+      deducedSkinType = 'Oily';
+      recommendations = dummyRecommendations['oily'];
+    } else if (answers.q1 === 'oily-tzone') {
+      deducedSkinType = 'Combination';
+      recommendations = dummyRecommendations['combination'];
+    }
+
+    if (answers.q2 === 'frequently') {
+      deducedSkinType = 'Acne-Prone';
+      recommendations = dummyRecommendations['acne-prone'];
+    }
+
+    if (answers.q3 === 'redness-itching') {
+      deducedSkinType = 'Sensitive';
+      recommendations = dummyRecommendations['sensitive'];
+    }
+
+    quizResultType.textContent = deducedSkinType;
+    quizRecommendedProductsList.innerHTML = '';
+    recommendations.forEach(product => {
+      const li = document.createElement('li');
+      li.textContent = product;
+      quizRecommendedProductsList.appendChild(li);
+    });
+
+    skinQuizForm.style.display = 'none';
+    quizResultsDiv.style.display = 'block';
+  });
+
+function updateNavActiveLink(sectionId) {
+  document.querySelectorAll('.nav-link').forEach(link => {
+    const target = link.getAttribute('data-section');
+    if (target === sectionId) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+}
+
+
+  viewRecommendedProductsBtn.addEventListener('click', () => {
+  closeModal('skin-quiz-modal');
+  const targetSection = document.getElementById('products');
+  if (targetSection) {
+    document.querySelectorAll('main section').forEach(section => {
+      section.classList.add('hidden-section');
+      section.classList.remove('active-section');
+    });
+    targetSection.classList.remove('hidden-section');
+    targetSection.classList.add('active-section');
+
+    // ✅ تحديث navbar
+    updateNavActiveLink('products');
+  }
+});
+
+  // Close modal when clicking outside content
+  window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal')) {
+      e.target.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Close modal with X
+  document.querySelectorAll('.close-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.modal').style.display = 'none';
+      document.body.style.overflow = '';
+    });
+  });
+
+
+</script>
+       
+
+
+        <section id="blog" class="blog-section hidden-section">
+  <div class="container">
+    <h2>Chat our special dermatologists</h2>
+    <p class="section-description">Connect instantly with professional dermatologists for personalized skincare advice and support.</p>
+
+    <div class="button-container">
+      <a href="users2.php" class="start-button">Start your Conversations</a>
+    </div>
+  </div>
+
+  <style>
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .start-button {
+      display: inline-block;
+      background-color: #ff69b4; /* Hot pink */
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      padding: 20px 40px;
+      border: none;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 8px 16px rgba(255, 105, 180, 0.3);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .start-button:hover {
+      background-color: #ff1493; /* Deep pink */
+      transform: scale(1.05);
+    }
+  </style>
+</section>
+
+        
+
+        <section id="dermatologists" class="dermatologists-section hidden-section">
+          
+            <div class="container">
+                <h2>Meet Our Expert Panel</h2>
+                <p class="section-description">The certified dermatologists who review and approve every product on DermGlam.</p>
+                 <div class="dermatologist-grid" id="derm-container">
+            <!-- سيتم تحميل الأطباء من خلال PHP عبر AJAX -->
+        </div>
+            </div>
+        </section>
+       
+
+        <script>
+
+          
+    // تحميل بيانات الأطباء عند تحميل الصفحة
+    document.addEventListener("DOMContentLoaded", function () {
+      
+    fetch('fetch_dermatologists.php')
+        .then(response => response.text())
+        .then(data => {
+            console.log("Received data:", data);  // هذا للتأكد من استلام البيانات
+            document.getElementById('derm-container').innerHTML = data;
+            document.getElementById("dermatologists").classList.remove("hidden-section");
+        })
+        .catch(error => {
+            console.error('Error fetching dermatologists:', error);
+            document.getElementById('derm-container').innerHTML = '<p>Error loading dermatologists.</p>';
+        });
+});
+</script>
+
+
+
+
+
+       
+
+
+
+
+
+
+        <section id="profile" class="profile-section hidden-section">
+            <div class="container">
+                <h2>My SkinGlam Profile</h2>
+                <p class="section-description">Manage your saved skin analyses, favorite products, and preferences.</p>
+
+                <div class="profile-tabs">
+                    
+                    <button class="tab-button active" data-tab="my-favorites">My Favorites</button>
+                    
+                    <button class="tab-button" data-tab="settings">Account Settings</button>
+                </div>
+
+
+                <div id="saved-scans" class="tab-content">
+                    <h3>Your Saved Skin Analyses</h3>
+                    <div class="analysis-list">
+                        <div class="analysis-card">
+                            <img src="https://via.placeholder.com/100x100" alt="Scan 1" class="scan-thumbnail">
+                            <div class="analysis-details">
+                                <h4>Analysis from May 20, 2025</h4>
+                                <p><strong>Skin Type:</strong> Combination</p>
+                                <p><strong>Concerns:</strong> Mild Acne, Occasional Redness</p>
+                                <button class="btn btn-sm btn-outline view-analysis-products"><i class="fas fa-box"></i> View Products</button>
+                                <button class="btn btn-sm btn-danger delete-analysis"><i class="fas fa-trash-alt"></i> Delete</button>
+                            </div>
+                        </div>
+                         <div class="analysis-card">
+                            <img src="https://via.placeholder.com/100x100" alt="Scan 2" class="scan-thumbnail">
+                            <div class="analysis-details">
+                                <h4>Analysis from April 10, 2025</h4>
+                                <p><strong>Skin Type:</strong> Oily</p>
+                                <p><strong>Concerns:</strong> Enlarged Pores, Oily T-zone</p>
+                                <button class="btn btn-sm btn-outline view-analysis-products"><i class="fas fa-box"></i> View Products</button>
+                                <button class="btn btn-sm btn-danger delete-analysis"><i class="fas fa-trash-alt"></i> Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary reminder-btn"><i class="fas fa-bell"></i> Set Re-Analyze Reminder</button>
+                </div>
+
+<style>
+    .product-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  width: 100%; /* مهم يجعل كل صف يمتد عرض الحاوية */
+  box-sizing: border-box;
+}
+
+
+.product-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.product-info {
+  flex-grow: 1;
+}
+
+.product-info h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.1em;
+}
+
+.price {
+  color: #d63384;
+  font-weight: bold;
+  margin: 0 0 6px 0;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+}
+
+.btn-remove-favorite {
+  background-color: transparent;
+  border: none;
+  color: #d63384;
+  font-size: 1.2em;
+  cursor: pointer;
+  margin-top: 8px;  /* مسافة فوقه */
+  display: inline-block; /* حتى ياخد سطر مستقل */
+  padding: 4px 0;
+}
+
+
+.favorite-products-grid {
+  display: flex;
+  flex-direction: column; /* لجعل العناصر تتكدس رأسياً صفًا صفًا */
+  gap: 10px; /* مسافة بين الصفوف */
+  width: 100%;
+}
+
+
+</style>
+
+            <div id="my-favorites" class="tab-content active">
+    <h3>Your Favorite Products</h3>
+    <div class="favorite-products-grid product-grid" id="favorites-container">
+        <!-- هنا راح نضيف المنتجات ديناميكيًا -->
+    </div>
+    <p class="no-favorites-message" id="no-favorites" style="display:none;">
+        You haven't saved any favorite products yet.
+    </p>
+</div>
+<script>
+    function loadFavorites(products) {
+  const container = document.querySelector('.favorite-products-grid');
+  container.innerHTML = ''; // empty container first
+
+  products.forEach(product => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+
+    // Image
+    const img = document.createElement('img');
+    img.src = product.image_product || 'https://via.placeholder.com/80';
+    img.alt = product.name;
+    card.appendChild(img);
+
+    // Info container
+    const info = document.createElement('div');
+    info.className = 'product-info';
+
+    const name = document.createElement('h3');
+    name.textContent = product.name;
+    info.appendChild(name);
+
+    const price = document.createElement('p');
+    price.className = 'price';
+    price.textContent = `$${parseFloat(product.price).toFixed(2)}`;
+    info.appendChild(price);
+
+    const tags = document.createElement('div');
+    tags.className = 'tags';
+
+    const skinTypeTag = document.createElement('span');
+    skinTypeTag.className = 'tag skin-type';
+    skinTypeTag.textContent = product.skin_type || 'N/A';
+    tags.appendChild(skinTypeTag);
+
+    // Add more tags if needed
+
+    info.appendChild(tags);
+    card.appendChild(info);
+
+    // Remove button
+    // داخل الدالة loadFavorites:
+const btnRemove = document.createElement('button');
+btnRemove.className = 'btn btn-remove-favorite';
+btnRemove.innerHTML = '<i class="fas fa-heart-broken"></i> Remove';
+btnRemove.onclick = () => {
+  if (!confirm('Are you sure you want to remove this product from favorites?')) return;
+
+  fetch('remove_favorite.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ product_id: product.product_id })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert('Removed from favorites');
+      // Remove the product card from DOM
+      card.remove();
+
+      // Optionally, show "no favorites" message if empty
+      if (document.querySelectorAll('.product-card').length === 0) {
+        document.getElementById('no-favorites').style.display = 'block';
+      }
+    } else {
+      alert('Failed to remove product: ' + (data.message || 'Unknown error'));
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Error removing product');
+  });
+};
+
+
+info.appendChild(btnRemove);  // <-- ضيفه هنا بدل card.appendChild
+
+
+    container.appendChild(card);
+  });
+}
+window.onload = function() {
+    fetch('get_favorites.php')
+      .then(response => response.json())
+      .then(products => {
+        if (products.length === 0) {
+          document.getElementById('no-favorites').style.display = 'block';
+        } else {
+          document.getElementById('no-favorites').style.display = 'none';
+          loadFavorites(products);
+        }
+      })
+      .catch(error => {
+        console.error('Error loading favorites:', error);
+      });
+  };
+</script>
+
+                <div id="my-reviews" class="tab-content">
+                    <h3>Your Product Reviews</h3>
+                    <div class="user-reviews-list">
+                        <div class="user-review-card">
+                            <h4>Review for Hydrating Tinted Moisturizer SPF 30</h4>
+                            <p class="review-meta">Skin Type: Dry | Skin Tone: Light | Purchased: May 1, 2025</p>
+                            <div class="product-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                            </div>
+                            <p class="review-text">"This tinted moisturizer is perfect for my dry, sensitive skin. It provides just enough coverage and feels amazing!"</p>
+                            <button class="btn btn-sm btn-warning edit-review"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-sm btn-danger delete-review"><i class="fas fa-trash-alt"></i> Delete</button>
+                        </div>
+                    </div>
+                    <p class="no-reviews-message" style="display: none;">You haven't submitted any reviews yet.</p>
+                </div>
+
+
+
+                <div id="settings" class="tab-content">
+                  <form id="account-settings-form"
+                        class="account-settings-form"
+                        action="save_settings.php"
+                        method="post"
+                        enctype="multipart/form-data">
+                
+                    <h3>Account Settings</h3>
+                
+                    <div class="form-group">
+                      <label for="fname">First Name:</label>
+                      <input type="text" id="fname" name="fname" required>
+                    </div>
+                
+                    <div class="form-group">
+                      <label for="lname">Last Name:</label>
+                      <input type="text" id="lname" name="lname" required>
+                    </div>
+                
+                    <div class="form-group">
+                      <label for="profile-name">Username:</label>
+                      <input type="text" id="profile-name" name="username" required>
+                    </div>
+                
+                    <div class="form-group">
+                      <label for="profile-email">Email:</label>
+                      <input type="email" id="profile-email" name="email" required>
+                    </div>
+                
+                    <div class="form-group">
+                      <label for="profile-skin-type">Preferred Skin Type:</label>
+                      <select id="profile-skin-type" name="skin_type" required>
+                        <option value="">Select...</option>
+                        <option value="Oily">Oily</option>
+                        <option value="Dry">Dry</option>
+                        <option value="Sensitive">Sensitive</option>
+                        <option value="Combination">Combination</option>
+                      </select>
+                    </div>
+                
+                    <div class="form-group">
+                      <label for="profile-pic">Profile Picture:</label>
+                      <input type="file" id="profile-pic" name="profile" accept="image/*">
+                    </div>
+                
+                    <button type="submit" class="btn btn-primary">
+                      <i class="fas fa-save"></i> Save Settings
+                    </button>
+                  </form>
+                
+                  <div id="response-message" style="margin-top:10px;"></div>
+                </div>
+                <script>
+                  document.addEventListener('DOMContentLoaded', () => {
+                  
+                    /* ---------- Tabs ---------- */
+                    const tabButtons  = document.querySelectorAll('.tab-button');
+                    const tabContents = document.querySelectorAll('.tab-content');
+                  
+                    tabButtons.forEach(button => {
+                      button.addEventListener('click', () => {  
+                        tabButtons .forEach(b => b.classList.remove('active'));
+                        tabContents.forEach(c => c.classList.remove('active'));
+                  
+                        button.classList.add('active');
+                        const tabId = button.dataset.tab;
+                        const content = document.getElementById(tabId);
+                        if (content) content.classList.add('active');
+                      });
+                    });
+                  
+                    /* ---------- Account‑settings submit ---------- */
+                    const form = document.getElementById('account-settings-form');
+                    form.addEventListener('submit', e => {
+                      e.preventDefault();
+                      const formData = new FormData(form);
+                  
+                      fetch(form.action, {
+                        method: 'POST',
+                        body  : formData
+                      })
+                      .then(r => r.json())
+                      .then(data => {
+                        const msg = document.getElementById('response-message');
+                        msg.textContent = data.message;
+                        msg.style.color =
+                            data.status === 'success' ? 'green'  :
+                            data.status === 'warning' ? 'orange' : 'red';
+                      })
+                      .catch(err => {
+                        const msg = document.getElementById('response-message');
+                        msg.textContent = 'Error: ' + err;
+                        msg.style.color = 'red';
+                      });
+                    });
+                  
+                  });
+                  </script>
+</div>
+        </section>
+
+        <div id="review-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h3>Submit Your Review</h3>
+                <form id="review-form">
+                    <input type="hidden" id="review-product-id">
+                    <div class="form-group">
+                        <label for="review-product-name">Product:</label>
+                        <input type="text" id="review-product-name" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-skin-type">Your Skin Type:</label>
+                        <select id="review-skin-type">
+                            <option value="oily">Oily</option>
+                            <option value="dry">Dry</option>
+                            <option value="sensitive">Sensitive</option>
+                            <option value="Normal">Normal</option>
+                            <option value="combination">Combination</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="review-skin-tone">Your Skin Tone:</label>
+                        <select id="review-skin-tone">
+                            <option value="fair">Fair</option>
+                            <option value="light">Light</option>
+                            <option value="medium">Medium</option>
+                            <option value="tan">Tan</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Rating:</label>
+                        <div class="stars" id="review-stars">
+                            <i class="far fa-star" data-value="1"></i>
+                            <i class="far fa-star" data-value="2"></i>
+                            <i class="far fa-star" data-value="3"></i>
+                            <i class="far fa-star" data-value="4"></i>
+                            <i class="far fa-star" data-value="5"></i>
+                        </div>
+                        <input type="hidden" id="review-rating" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="review-text">Your Review:</label>
+                        <textarea id="review-text" rows="5" placeholder="Share your experience with this product..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Review</button>
+                </form>
+            </div>
+        </div>
+
+        <section id="gallery" class="gallery-section hidden-section">
+            <div class="container">
+                <h2>Real Results: Before & After Gallery</h2>
+                <p class="section-description">See the transformative power of dermatologist-recommended makeup.</p>
+                <div class="gallery-filters">
+                    <label for="gallery-skin-condition">Filter by Skin Condition:</label>
+                    <select id="gallery-skin-condition">
+                        <option value="all">All</option>
+                        <option value="acne">Acne</option>
+                        <option value="rosacea">Rosacea</option>
+                        <option value="hyperpigmentation">Hyperpigmentation</option>
+                    </select>
+                </div>
+                <div class="gallery-grid">
+                    <div class="gallery-item" data-condition="acne">
+                        <img src="https://via.placeholder.com/300x200?text=Before" alt="Before Acne">
+                        <img src="https://via.placeholder.com/300x200?text=After" alt="After Acne">
+                        <div class="gallery-caption">
+                            <h4>Acne Coverage Example</h4>
+                            <p>Using Oil-Free Matte Foundation</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" data-condition="rosacea">
+                        <img src="https://via.placeholder.com/300x200?text=Before" alt="Before Rosacea">
+                        <img src="https://via.placeholder.com/300x200?text=After" alt="After Rosacea">
+                        <div class="gallery-caption">
+                            <h4>Redness Reduction Example</h4>
+                            <p>Using Hydrating Tinted Moisturizer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+         <section id="ingredient-checker" class="ingredient-checker-section hidden-section">
+            <div class="container">
+                <h2>Ingredient Checker Tool</h2>
+                <p class="section-description">Paste an ingredient list to see its potential impact on your skin.</p>
+                <div class="ingredient-checker-input">
+                    <textarea id="ingredient-list-input" rows="10" placeholder="Paste product ingredient list here (e.g., Aqua, Glycerin, Salicylic Acid, Parfum...)"></textarea>
+                    <button class="btn btn-primary" id="analyze-ingredients-btn"><i class="fas fa-flask"></i> Analyze Ingredients</button>
+                </div>
+                <div class="ingredient-results" style="display:none;">
+                    <h3>Analysis Results:</h3>
+                    <div id="ingredient-breakdown">
+                        </div>
+                    <div class="concern-suitability">
+                        <h4>Suitability for Specific Concerns:</h4>
+                        <p><i class="fas fa-check-circle success-icon"></i> <span class="concern-text">Suitable for Acne-Prone Skin</span> (No known comedogenic ingredients found)</p>
+                        <p><i class="fas fa-exclamation-triangle warning-icon"></i> <span class="concern-text">Potentially Irritating for Sensitive Skin</span> (Contains Parfum, Alcohol Denat)</p>
+                    </div>
+                </div>
+                <p class="privacy-note"><i class="fas fa-info-circle"></i> This tool provides general guidance. Always patch test new products. Data is processed locally and not stored.</p>
+            </div>
+        </section>
+       
+
+    
+
+    </main>
+
+    <footer>
+      <style>
+        .hidden-section {
+  display: none;
+}
+
+      </style>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>DermGlam</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="careers.html">Careers</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="returns.html">Return Policy</a></li>
+                        <li><a href="cookie.html">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/skinglam"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/skinglam"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.pinterest.com/skinglam"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="https://www.youtube.com/@skinglam"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <p>Be the first to know about skin-loving offers and expert tips!</p>
+                    <form class="newsletter-form" id="newsletter-form">
+                        <input type="email" id="email-input" name="email" placeholder="Your email address" required>
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                    <p id="subscribe-message" style="margin-top: 10px; color: #ff1493; font-weight: bold;"></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2025 DermGlam. All rights reserved.
+            </div>
+        </div>
+       <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById("newsletter-form");
+    const emailInput = document.getElementById("email-input");
+    const messageEl = document.getElementById("subscribe-message");
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault(); // 🛑 يمنع إعادة تحميل الصفحة
+
+        const email = emailInput.value.trim();
+        if (email === "") {
+            messageEl.textContent = "Please enter a valid email.";
+            return;
+        }
+
+        fetch("subscribe.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "email=" + encodeURIComponent(email)
+        })
+        .then(response => response.text())
+        .then(data => {
+            messageEl.textContent = data;
+            emailInput.value = ""; // clear field
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            messageEl.textContent = "Something went wrong. Try again.";
+        });
+    });
+});
+</script>
+
+
+    </footer>
+
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay">
+        <span class="close-mobile-menu">&times;</span>
+        <nav class="mobile-nav">
+            <ul>
+                <li><a href="#home" class="nav-link" data-section="home">Home</a></li>
+                <li><a href="#products" class="nav-link" data-section="products">Shop Products</a></li>
+                <li><a href="#analyzer" class="nav-link" data-section="analyzer">Skin Analyzer</a></li>
+                <li><a href="#blog" class="nav-link" data-section="blog">Derm Insights</a></li>
+                <li><a href="#dermatologists" class="nav-link" data-section="dermatologists">Our Experts</a></li>
+                <li><a href="#profile" class="nav-link" data-section="profile">My Profile</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script src="jj.js"></script>
+</body>
+</html>
