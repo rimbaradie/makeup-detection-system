@@ -40,7 +40,10 @@ This project bridges traditional product selection methods with intelligent AI-d
 - **API:** Face++ Camera API  
 - **Tools:** VS Code, Android Studio  
 
----
+---![pic1](https://github.com/user-attachments/assets/09bfff9a-fd07-4c2b-a73e-95ea62302079)
+![pic2](https://github.com/user-attachments/assets/7fc2e325-b8cb-4b07-9c95-4dbe82ca5908)
+
+
 
 ## Installation
 
@@ -48,3 +51,4 @@ This project bridges traditional product selection methods with intelligent AI-d
 1. Clone the repository:  
    ```bash
    git clone https://github.com/rimbaradie/makeup-detection-system.git
+
